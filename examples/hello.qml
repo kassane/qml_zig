@@ -3,8 +3,8 @@ import QtQuick.Controls 1.4
 
 ApplicationWindow {
     id: app
-    title: "Hello World QRC Example"
-    width: 300; height: 100
+    title: "Hello World [ZIG]- Example"
+    width: 300; height: 200
     color: "lightgray"
     Component.onCompleted: visible = true
 
