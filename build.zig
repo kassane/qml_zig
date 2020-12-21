@@ -19,8 +19,8 @@ pub fn build(b: *Builder) !void {
         "deps/dotherside/build",
         "-j",
     });
-    // try DOtherSide_prebuild.step.make();
-    // try DOtherSide_build.step.make();
+    try DOtherSide_prebuild.step.make();
+    try DOtherSide_build.step.make();
 
     const exe = b.addExecutable("qml_zig", "src/qml_zig.zig");
     if (mode != .Debug) {

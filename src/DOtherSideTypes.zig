@@ -18,11 +18,14 @@ pub const DObjectCallback = ?fn (?*c_void, ?*DosQVariant, c_int, [*c]?*DosQVaria
 pub const RowCountCallback = ?fn (?*c_void, ?*const DosQModelIndex, [*c]c_int) callconv(.C) void;
 pub const ColumnCountCallback = ?fn (?*c_void, ?*const DosQModelIndex, [*c]c_int) callconv(.C) void;
 pub const DataCallback = ?fn (?*c_void, ?*const DosQModelIndex, c_int, ?*DosQVariant) callconv(.C) void;
+pub const SetDataCallback = ?fn (?*c_void, ?*const DosQModelIndex, ?*const DosQVariant, c_int, [*c]bool) callconv(.C) void;
 pub const RoleNamesCallback = ?fn (?*c_void, ?*DosQHashIntQByteArray) callconv(.C) void;
 pub const FlagsCallback = ?fn (?*c_void, ?*const DosQModelIndex, [*c]c_int) callconv(.C) void;
 pub const HeaderDataCallback = ?fn (?*c_void, c_int, c_int, c_int, ?*DosQVariant) callconv(.C) void;
 pub const IndexCallback = ?fn (?*c_void, c_int, c_int, ?*const DosQModelIndex, ?*DosQModelIndex) callconv(.C) void;
 pub const ParentCallback = ?fn (?*c_void, ?*const DosQModelIndex, ?*DosQModelIndex) callconv(.C) void;
+pub const HasChildrenCallback = ?fn (?*c_void, ?*const DosQModelIndex, [*c]bool) callconv(.C) void;
+pub const CanFetchMoreCallback = ?fn (?*c_void, ?*const DosQModelIndex, [*c]bool) callconv(.C) void;
 pub const FetchMoreCallback = ?fn (?*c_void, ?*const DosQModelIndex) callconv(.C) void;
 pub const CreateDObject = ?fn (c_int, ?*c_void, [*c]?*c_void, [*c]?*c_void) callconv(.C) void;
 pub const DeleteDObject = ?fn (c_int, ?*c_void) callconv(.C) void;
@@ -86,11 +89,14 @@ pub const struct_DosQAbstractItemModelCallbacks = extern struct {
     rowCount: RowCountCallback,
     columnCount: ColumnCountCallback,
     data: DataCallback,
+    setData: SetDataCallback,
     roleNames: RoleNamesCallback,
     flags: FlagsCallback,
     headerData: HeaderDataCallback,
     index: IndexCallback,
     parent: ParentCallback,
+    hasChildren: HasChildrenCallback,
+    canFetchMore: CanFetchMoreCallback,
     fetchMore: FetchMoreCallback,
 };
 pub const DosQAbstractItemModelCallbacks = struct_DosQAbstractItemModelCallbacks;
@@ -118,5 +124,3 @@ pub const enum_DosQtConnectionType = extern enum(c_int) {
     DosQtCOnnectionTypeUniqueConnection = 128,
     _,
 };
-pub const DosQEventLoopProcessEventFlag = enum_DosQEventLoopProcessEventFlag;
-pub const DosQtConnectionType = enum_DosQtConnectionType;

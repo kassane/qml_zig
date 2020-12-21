@@ -1,5 +1,5 @@
 //const std = @import("std");
-const ds = @import("./dotherside.zig");
+const ds = @import("./DOtherSide.zig");
 
 const app = @embedFile("../examples/hello.qml"); //Compile-time readfile
 
