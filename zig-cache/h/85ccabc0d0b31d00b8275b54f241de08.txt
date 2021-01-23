@@ -1,2 +1,0 @@
-17960 21500311 1611433123885944695 d2be3bc8e28235fcb2d12b2d410f91e3 /home/kassane/Documentos/Projetos/Zig/qml_zig/zig-cache/o/d95f8d34b90f3cd6cadf41efb0703db2/Animated.o
-50522 657287 1611423877584466985 f838a3bc0f78f750593f2298a6c62ffe /home/kassane/.cache/zig/o/801968315b77a8bd3f7d4c8d6995bd4c/libcompiler_rt.a
