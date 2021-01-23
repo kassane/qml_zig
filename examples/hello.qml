@@ -14,4 +14,24 @@ ApplicationWindow {
         anchors.horizontalCenter: app.contentItem.horizontalCenter
         font.pointSize: 24; font.bold: true
     }
+
+    menuBar: MenuBar {
+            Menu {
+                title: qsTr("File")
+                MenuItem {
+                    text: qsTr("&Open")
+                    onTriggered: console.log("Open action triggered");
+                }
+                MenuItem {
+                    text: qsTr("Exit")
+                    onTriggered: Qt.quit();
+                }
+            }
+    }
+
+    Button {
+        text: qsTr("click bait")
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter / 2
+    }
 }

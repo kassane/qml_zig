@@ -1,0 +1,2 @@
+18840 21504424 1611433124569287774 0822c85e4ecb3c746788abe93693559c /home/kassane/Documentos/Projetos/Zig/qml_zig/zig-cache/o/32d23945d20c5499d7bad13a98db0fa0/Hello.o
+50522 262215 1611423373933007074 7c16e5ae52e9fc29dca3d9370d8f0f5f /home/kassane/.cache/zig/o/52c7f8e2db04c1a5320852aa25e39117/libcompiler_rt.a

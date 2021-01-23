@@ -1,4 +1,4 @@
-usingnamespace @import("DOtherSideTypes.zig");
+usingnamespace @import("./DOtherSideTypes.zig");
 
 pub extern fn dos_qcoreapplication_application_dir_path() [*c]u8;
 pub extern fn dos_qcoreapplication_process_events(flags: enum_DosQEventLoopProcessEventFlag) void;

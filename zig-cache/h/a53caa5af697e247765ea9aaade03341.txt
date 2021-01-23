@@ -1,0 +1,2 @@
+17960 21504438 1611433182053439778 d2be3bc8e28235fcb2d12b2d410f91e3 /home/kassane/Documentos/Projetos/Zig/qml_zig/zig-cache/o/8edc934d06942870879ccf154040fd5a/Animated.o
+50522 262215 1611423373933007074 7c16e5ae52e9fc29dca3d9370d8f0f5f /home/kassane/.cache/zig/o/52c7f8e2db04c1a5320852aa25e39117/libcompiler_rt.a
