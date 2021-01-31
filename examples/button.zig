@@ -8,7 +8,7 @@ pub fn main() anyerror!void {
     var engine = QQmlApplicationEngine.create();
     defer engine.delete();
 
-    engine.loadData(@embedFile("hello.qml"));
+    engine.loadData(@embedFile("button.qml"));
 
     QGuiApplication.exec();
 }
