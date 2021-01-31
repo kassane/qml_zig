@@ -8,6 +8,6 @@ pub fn main() anyerror!void {
     var engine = QQmlApplicationEngine.create();
     defer engine.delete();
 
-    engine.loadData(@embedFile("button.qml"));
+    engine.loadData(@embedFile("tableview.qml"));
     QGuiApplication.exec();
 }

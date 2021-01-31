@@ -25,6 +25,8 @@ Initial
 
 `zig build Splits` - Splitview example
 
+`zig build Tables` - Tableview example
+
 # Work in Progres Examples
 
 `zig build Particle` - Particle system example
