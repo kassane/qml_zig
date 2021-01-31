@@ -19,4 +19,6 @@ Initial
 
 `zig build Cells` - Cells example from QML Tute, click a color to change the text
 
-`zig build Button` - super basic Button example
+`zig build Button` - Button with 2-way comms to the Zig code
+
+`zig build Particle` - Particle system example

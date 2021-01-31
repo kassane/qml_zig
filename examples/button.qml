@@ -8,7 +8,7 @@ ApplicationWindow {
 
     Button {
         id: button
-        text: "Just a Button"
+        text: "A button you can click on"
         background: Rectangle {
             implicitWidth: 100
             implicitHeight: 40
