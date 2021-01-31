@@ -7,6 +7,7 @@ pub const QVariant = struct {
     pub fn create(value: anytype) QVariant {
         var vptr = switch (@typeInfo(@TypeOf(value))) {
             .Null => dos.dos_qvariant_create(),
+            .Pointer => dos.dos_qvariant_create_string(value),
             .Int => dos.dos_qvariant_create_int(@intCast(c_int, value)),
             .Float => |float| switch (float.bits) {
                 32 => dos.dos_qvariant_create_float(value),
@@ -31,6 +32,7 @@ pub const QVariant = struct {
     pub fn setValue(self: QVariant, value: anytype) void {
         switch (@typeInfo(@TypeOf(value))) {
             .Null => @compileError("Cannot set variant to null"),
+            .Pointer => dos.dos_qvariant_setString(self.vptr, value),
             .Int => dos.dos_qvariant_setInt(self.vptr, @intCast(c_int, value)),
             .Float => |float| switch (float.bits) {
                 32 => dos.dos_qvariant_setFloat(value),
@@ -45,6 +47,7 @@ pub const QVariant = struct {
     pub fn getValue(self: QVariant, comptime T: type) T {
         return switch (@typeInfo(T)) {
             .Null => @compileError("Use isNull"),
+            .Pointer => dos.dos_qvariant_toString(self.vptr),
             .Int => @intCast(T, dos.dos_qvariant_toInt(self.vptr)),
             .Bool => dos.dos_qvariant_toBool(self.vptr),
             .Float => |float| switch (float.bits) {

@@ -1,15 +1,21 @@
-import QtQuick 2.2
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Particles 2.0
 import QtGraphicalEffects 1.0
 
 ApplicationWindow {
 	id: app
-    title: "Zig Particles"
 	width: 640
 	height: 480
     color: "lightgray"
     visible: true
-    Component.onCompleted: visible = true
+
+    Rectangle {
+	id: rect
+	width: 640
+	height: 480
+    color: "red"
+    visible: true
 
     gradient: Gradient {
         GradientStop { position: 0.0; color: "#3a2c32"; }
@@ -18,7 +24,7 @@ ApplicationWindow {
     }
 
     Text {
-        text: "Some Text"
+        text: "Zig Particle System Demo"
 
         Component.onCompleted: {
             x = parent.width/2 - width/2
@@ -33,7 +39,7 @@ ApplicationWindow {
             id: mouseArea
             anchors.fill: parent
             drag.target: parent
-                    onReleased: ctrl.textReleased(parent)
+            onReleased: ctrl.textReleased(parent)
         }
     }
 
@@ -85,9 +91,10 @@ ApplicationWindow {
             Timer {
                 interval: life
                 running: true
-                onTriggered: ctrl.done(container)
+                //onTriggered: ctrl.done(container)
             }
         }
+    }
     }
 }
 
