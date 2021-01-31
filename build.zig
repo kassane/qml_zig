@@ -60,6 +60,7 @@ pub fn build(b: *Builder) !void {
     // Copypasta from the Go QML eamples https://github.com/go-qml/qml/tree/v1/examples
     try makeExample(b, mode, target, "examples/particle.zig", "Particle");
     try makeExample(b, mode, target, "examples/layouts.zig", "Layouts");
+    try makeExample(b, mode, target, "examples/splitview.zig", "Splits");
 
     // Cloned simple examples from the Qml doco
     try makeExample(b, mode, target, "examples/basic.zig", "Basic");

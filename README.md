@@ -23,6 +23,8 @@ Initial
 
 `zig build Layouts` - Layouts examples
 
+`zig build Splits` - Splitview example
+
 # Work in Progres Examples
 
 `zig build Particle` - Particle system example
