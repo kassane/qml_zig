@@ -12,7 +12,7 @@ pub fn QObject(comptime T: type) type {
 
         pub fn create() type {
             for (str.fields) |field| {
-                //std.debug.print("name: {}\n", .{field.name});
+                std.debug.print("name: {}\n", .{field.name});
             }
             return Self{};
         }
