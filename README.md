@@ -21,4 +21,9 @@ Initial
 
 `zig build Button` - Button with 2-way comms to the Zig code
 
+`zig build Layouts` - Layouts examples
+
+# Work in Progres Examples
+
 `zig build Particle` - Particle system example
+- Needs QObject wrapper working yet, to pass zig objects to the QML side
