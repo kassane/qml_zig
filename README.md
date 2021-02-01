@@ -15,8 +15,6 @@ Initial
 
 `zig build Hello` - Hello World, with Menu and Clickable Button
 
-`zig build Basic` - super basic Hello World
-
 `zig build Cells` - Cells example from QML Tute, click a color to change the text
 
 `zig build Button` - Button with 2-way comms to the Zig code
