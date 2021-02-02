@@ -1,3 +1,4 @@
+const std = @import("std");
 usingnamespace @import("./DOtherSide.zig");
 
 pub fn QObject(comptime T: type) type {
@@ -5,7 +6,7 @@ pub fn QObject(comptime T: type) type {
     const str: std.builtin.TypeInfo.Struct = typeInfo.Struct;
 
     return struct {
-        const parentType = T;
+        pub const parentType = T;
         const Self = @This();
         const name: []const u8 = @typeName(T);
 

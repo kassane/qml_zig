@@ -1,6 +1,9 @@
 const std = @import("std");
 const Builder = std.build.Builder;
 const Pkg = std.build.Pkg;
+const string = []const u8;
+const alloc = std.heap.page_allocator;
+const fmt_description = "Run the {s} example";
 
 const Pkgs = struct {
     const QObject: Pkg = .{
@@ -46,72 +49,55 @@ pub fn build(b: *Builder) !void {
     const target = b.standardTargetOptions(.{});
 
     try cmakeBuild(b);
-    try animated(b, mode, target);
-    try hello(b, mode, target);
+
+    // Original examples
+    try makeExample(b, mode, target, "examples/animated.zig", "Animated");
+    try makeExample(b, mode, target, "examples/hello.zig", "Hello");
+
+    // More examples
+    try makeExample(b, mode, target, "examples/button.zig", "Button");
+
+    // Copypasta from the Go QML eamples https://github.com/go-qml/qml/tree/v1/examples
+    try makeExample(b, mode, target, "examples/particle.zig", "Particle");
+    try makeExample(b, mode, target, "examples/layouts.zig", "Layouts");
+    try makeExample(b, mode, target, "examples/splitview.zig", "Splits");
+    try makeExample(b, mode, target, "examples/tableview.zig", "Tables");
+
+    // Cloned simple examples from the Qml doco
+    try makeExample(b, mode, target, "examples/cells.zig", "Cells");
 }
 
-fn animated(b: *Builder, mode: std.builtin.Mode, target: std.zig.CrossTarget) !void {
+fn makeExample(b: *Builder, mode: std.builtin.Mode, target: std.zig.CrossTarget, src: string, name: string) !void {
     //Example 1
-    const hello_example = b.addExecutable("Animated", "examples/animated.zig");
+    const example = b.addExecutable(name, src);
     if (mode != .Debug) {
-        hello_example.strip = true;
+        example.strip = true;
     }
-    hello_example.setBuildMode(mode);
-    hello_example.setTarget(target);
-    hello_example.addPackage(Pkgs.QObject);
-    hello_example.addPackage(Pkgs.QVariant);
-    hello_example.addPackage(Pkgs.QUrl);
-    hello_example.addPackage(Pkgs.QMetaType);
-    hello_example.addPackage(Pkgs.QMetaObject);
-    hello_example.addPackage(Pkgs.QQmlContext);
-    hello_example.addPackage(Pkgs.QGuiApplication);
-    hello_example.addPackage(Pkgs.QQmlApplicationEngine);
-    hello_example.addPackage(Pkgs.DOtherSide);
-    hello_example.addLibPath("deps/dotherside/build/lib");
-    hello_example.linkSystemLibraryName("DOtherSide");
-    hello_example.linkLibC();
-    hello_example.install();
+    example.setBuildMode(mode);
+    example.setTarget(target);
+    example.addPackage(Pkgs.QObject);
+    example.addPackage(Pkgs.QVariant);
+    example.addPackage(Pkgs.QUrl);
+    example.addPackage(Pkgs.QMetaType);
+    example.addPackage(Pkgs.QMetaObject);
+    example.addPackage(Pkgs.QQmlContext);
+    example.addPackage(Pkgs.QGuiApplication);
+    example.addPackage(Pkgs.QQmlApplicationEngine);
+    example.addPackage(Pkgs.DOtherSide);
+    example.addLibPath("deps/dotherside/build/lib");
+    example.linkSystemLibraryName("DOtherSide");
+    example.linkLibC();
+    example.install();
 
-    const run_cmd = hello_example.run();
+    const run_cmd = example.run();
     run_cmd.step.dependOn(b.getInstallStep());
     if (b.args) |args| {
         run_cmd.addArgs(args);
     }
 
-    const run_step = b.step("Animated", "Run the animated example");
+    var descr = std.fmt.allocPrintZ(alloc, fmt_description, .{name}) catch unreachable;
+    const run_step = b.step(name, descr);
     run_step.dependOn(&run_cmd.step);
-}
-
-fn hello(b: *Builder, mode: std.builtin.Mode, target: std.zig.CrossTarget) !void {
-    //Example 2
-    const hello_example = b.addExecutable("Hello", "examples/hello.zig");
-    if (mode != .Debug) {
-        hello_example.strip = true;
-    }
-    hello_example.setBuildMode(mode);
-    hello_example.setTarget(target);
-    hello_example.addPackage(Pkgs.QObject);
-    hello_example.addPackage(Pkgs.QVariant);
-    hello_example.addPackage(Pkgs.QUrl);
-    hello_example.addPackage(Pkgs.QMetaType);
-    hello_example.addPackage(Pkgs.QMetaObject);
-    hello_example.addPackage(Pkgs.QQmlContext);
-    hello_example.addPackage(Pkgs.QGuiApplication);
-    hello_example.addPackage(Pkgs.QQmlApplicationEngine);
-    hello_example.addPackage(Pkgs.DOtherSide);
-    hello_example.addLibPath("deps/dotherside/build/lib");
-    hello_example.linkSystemLibrary("DOtherSide");
-    hello_example.linkLibC();
-    hello_example.install();
-
-    const run_widget = hello_example.run();
-    run_widget.step.dependOn(b.getInstallStep());
-    if (b.args) |args| {
-        run_widget.addArgs(args);
-    }
-
-    const widget_step = b.step("hello", "Run the Hello example");
-    widget_step.dependOn(&run_widget.step);
 }
 
 fn cmakeBuild(b: *Builder) !void {
