@@ -51,22 +51,13 @@ jobs:
         with:
           python-version: ${{ matrix.py }}
 
-      - name: Build
-        if: ${{ matrix.os == 'windows-latest' }}
-        run: |
-          zig build
-      
-      - name: Run Tests
+      - name: Build & Tests
         run: |
           zig build Hello
           zig build Animated
           zig build Cells
           zig build Table
-
-      - name: Deploy
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: |
-          zig build Hello
-          zig build Animated
-          zig build Cells
-          zig build Table
+          zig build Layouts
+          zig build Particle
+          zig build Button
+          zig build Splits
