@@ -25,31 +25,21 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2.12.1
         with:
-          version: 5.15.2
-          setup-python: 'true'
           modules: qtcharts qtquick3d
           aqtversion: '>=0.11.1'
           py7zrversion: '>=0.11.3'
           extra: '--external 7z'
-          set-env: 'true'
       
       - name: Set up Python
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.py }}
-
-      - if: ${{ matrix.os == 'windows-latest' }}
-        name: MSYS2
-        uses: msys2/setup-msys2@v2
-        with:
-          update: true
-          install: base-devel git unzip mingw-w64-${{ matrix.arch }}-toolchain mingw-w64-${{ matrix.arch }}-cmake mingw-w64-${{ matrix.arch }}-qt5
       
       - name: Deps - Ubuntu
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           sudo apt-get update
-          sudo apt-get install build-essential libgl1-mesa-dev libxkbcommon-x11-0 libpulse-dev -y
+          sudo apt-get install build-essential libgl1-mesa-dev libxkbcommon-x11-0 libpulse-dev libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0-dev libxcb-render-util0 libxcb-xinerama0 -y
           
       - name: Build & Tests
         run: |
