@@ -4,12 +4,20 @@ on: [push, pull_request]
 
 jobs:
   build:
+    container: fedora:latest
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
           fetch-depth: 0
+      
+      - name: Install buildtools
+        run: |
+          uname -a
+          dnf -y install @development-tools @rpm-development-tools
+          dnf -y install copr-cli make gcc-c++
+          dnf -y upgrade git
       
       - name: Install zig
         uses: goto-bus-stop/setup-zig@v1

@@ -16,23 +16,12 @@ jobs:
         with:
           version: master
 
-      - name: get-cmake
-        uses: lukka/get-cmake@v3.19.2
-
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v2
-        with:
-          modules: qtcharts qtquick3d
-          aqtversion: '>=0.11.1'
-          py7zrversion: '>=0.11.3'
-      
-      - name: Set up Python
-        uses: actions/setup-python@v1
-        with:
-          python-version: '3.x'
+      - name: Install
+        run: brew install qt gdb
 
       - name: Build & Tests
         run: |
+          QTDIR="/usr/local/opt/qt/" && PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && CPPFLAGS=-I${QTDIR}/include;
           zig build Hello
           zig build Animated
           zig build Cells

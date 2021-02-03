@@ -40,11 +40,11 @@ jobs:
         run: |
           cd /C/_
           echo "Building w/ Zig version: ${zig version}"
-          zig build Animated -Dtarget=${{ matrix.arch }}-${{ matrix.os }}-gnu
-          zig build Button -Dtarget=${{ matrix.arch }}-${{ matrix.os }}-gnu
-          zig build Cells -Dtarget=${{ matrix.arch }}-${{ matrix.os }}-gnu
-          zig build Hello -Dtarget=${{ matrix.arch }}-${{ matrix.os }}-gnu
-          zig build Layouts -Dtarget=${{ matrix.arch }}-${{ matrix.os }}-gnu
-          zig build Particle -Dtarget=${{ matrix.arch }}-${{ matrix.os }}-gnu
-          zig build Splits -Dtarget=${{ matrix.arch }}-${{ matrix.os }}-gnu
-          zig build Table -Dtarget=${{ matrix.arch }}-${{ matrix.os }}-gnu
+          zig build Animated -Dtarget=${{ matrix.arch }}-windows-gnu
+          zig build Button -Dtarget=${{ matrix.arch }}-windows-gnu
+          zig build Cells -Dtarget=${{ matrix.arch }}-windows-gnu
+          zig build Hello -Dtarget=${{ matrix.arch }}-windows-gnu
+          zig build Layouts -Dtarget=${{ matrix.arch }}-windows-gnu
+          zig build Particle -Dtarget=${{ matrix.arch }}-windows-gnu
+          zig build Splits -Dtarget=${{ matrix.arch }}-windows-gnu
+          zig build Table -Dtarget=${{ matrix.arch }}-windows-gnu
