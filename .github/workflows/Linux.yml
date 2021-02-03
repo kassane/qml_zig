@@ -1,13 +1,10 @@
-name: Build
+name: macOS
 
 on: [push, pull_request]
 
 jobs:
   build:
-    strategy:
-      matrix:
-        os: [macos-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
@@ -15,12 +12,12 @@ jobs:
           fetch-depth: 0
       
       - name: Install zig
-        uses: goto-bus-stop/setup-zig@v1.3.0
+        uses: goto-bus-stop/setup-zig@v1
         with:
           version: master
 
       - name: get-cmake
-        uses: lukka/get-cmake@v3.19.2
+        uses: lukka/get-cmake@v3
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
@@ -32,7 +29,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v1
         with:
-          python-version: ${{ matrix.py }}
+          python-version: '3.x'
 
       - name: Build & Tests
         run: |

@@ -1,0 +1,43 @@
+name: macOS
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      
+      - name: Install zig
+        uses: goto-bus-stop/setup-zig@v1
+        with:
+          version: master
+
+      - name: get-cmake
+        uses: lukka/get-cmake@v3
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          modules: qtcharts qtquick3d
+          aqtversion: '>=0.11.1'
+          py7zrversion: '>=0.11.3'
+      
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
+
+      - name: Build & Tests
+        run: |
+          zig build Hello
+          zig build Animated
+          zig build Cells
+          zig build Table
+          zig build Layouts
+          zig build Particle
+          zig build Button
+          zig build Splits
