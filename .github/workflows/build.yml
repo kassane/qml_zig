@@ -39,6 +39,20 @@ jobs:
         with:
           python-version: ${{ matrix.py }}
 
+      - name: Build & Tests - Ubuntu
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install build-essential libgl1-mesa-dev libxkbcommon-x11-0 libpulse-dev -y
+          zig build Hello
+          zig build Animated
+          zig build Cells
+          zig build Table
+          zig build Layouts
+          zig build Particle
+          zig build Button
+          zig build Splits
+          
       - name: Build & Tests
         run: |
           zig build Hello
