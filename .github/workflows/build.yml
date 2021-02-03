@@ -38,7 +38,8 @@ jobs:
         with:
           python-version: ${{ matrix.py }}
 
-      - name: MSYS2
+      - if: ${{ matrix.os == 'windows-latest' }}
+        name: MSYS2
         uses: msys2/setup-msys2@v2
         with:
           update: true
