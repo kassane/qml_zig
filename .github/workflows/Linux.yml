@@ -1,4 +1,4 @@
-name: macOS
+name: Linux
 
 on: [push, pull_request]
 
@@ -17,7 +17,7 @@ jobs:
           version: master
 
       - name: get-cmake
-        uses: lukka/get-cmake@v3
+        uses: lukka/get-cmake@v3.19.2
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
