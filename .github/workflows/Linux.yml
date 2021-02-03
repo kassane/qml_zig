@@ -14,7 +14,7 @@ jobs:
       - name: Install buildtools
         run: |
             sudo apt update
-            sudo apt install build-essential libgl1-mesa-dev libxcb-xinerama0 libxkbcommon-x11-0 libpulse-dev ninja cmake -y
+            sudo apt install build-essential libgl1-mesa-dev libxcb-xinerama0 libxkbcommon-x11-0 libpulse-dev ninja-build cmake -y
     
       - name: Install Qt5
         uses: jurplel/install-qt-action@v2

@@ -104,7 +104,7 @@ fn cmakeBuild(b: *Builder) !void {
     //CMake builds - DOtherSide build
     const DOtherSide_configure = b.addSystemCommand(&[_][]const u8{
         "cmake",
-        "-GNinja"
+        "-GNinja",
         "-B",
         "deps/dotherside/build",
         "-S",
