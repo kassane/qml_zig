@@ -32,10 +32,6 @@ jobs:
           aqtversion: '>=0.11.1'
           py7zrversion: '>=0.11.3'
           extra: '--external 7z'
-          if: ${{ matrix.os == 'windows-latest' }}
-          host: 'windows'
-          target: 'desktop'
-          arch: 'win64_mingw81'
           set-env: 'true'
       
       - name: Set up Python
