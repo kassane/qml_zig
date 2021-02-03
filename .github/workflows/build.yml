@@ -27,7 +27,6 @@ jobs:
         with:
           version: 5.15.2
           setup-python: 'true'
-          install-deps: 'true'
           modules: qtcharts qtquick3d
           aqtversion: '>=0.11.1'
           py7zrversion: '>=0.11.3'
@@ -39,19 +38,17 @@ jobs:
         with:
           python-version: ${{ matrix.py }}
 
-      - name: Build & Tests - Ubuntu
+      - name: MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: base-devel git unzip mingw-w64-${{ matrix.arch }}-toolchain mingw-w64-${{ matrix.arch }}-cmake mingw-w64-${{ matrix.arch }}-qt5
+      
+      - name: Deps - Ubuntu
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           sudo apt-get update
           sudo apt-get install build-essential libgl1-mesa-dev libxkbcommon-x11-0 libpulse-dev -y
-          zig build Hello
-          zig build Animated
-          zig build Cells
-          zig build Table
-          zig build Layouts
-          zig build Particle
-          zig build Button
-          zig build Splits
           
       - name: Build & Tests
         run: |
