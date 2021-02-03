@@ -16,8 +16,10 @@ jobs:
             sudo apt-get update
             sudo apt-get install build-essential libgl1-mesa-dev libxkbcommon-x11-0 libpulse-dev qt5-default cmake -y
     
-    - name: Install Qt5
-      uses: jurplel/install-qt-action@v2
+      - name: Install Qt5
+        uses: jurplel/install-qt-action@v2
+        with:
+          modules: qtcharts
       
       - name: Install zig
         uses: goto-bus-stop/setup-zig@v1
@@ -26,11 +28,11 @@ jobs:
 
       - name: Build & Tests
         run: |
-          zig build Hello
           zig build Animated
-          zig build Cells
-          zig build Table
+          zig build Button
+          zig build Cells          
+          zig build Hello
           zig build Layouts
           zig build Particle
-          zig build Button
           zig build Splits
+          zig build Table

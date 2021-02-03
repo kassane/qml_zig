@@ -33,7 +33,6 @@ jobs:
       - name: Build & Tests
         shell: msys2 {0}
         run: |
-          cd /C/_
           zig build Animated -Dtarget=${{ matrix.arch }}-windows-gnu
           zig build Button -Dtarget=${{ matrix.arch }}-windows-gnu
           zig build Cells -Dtarget=${{ matrix.arch }}-windows-gnu
