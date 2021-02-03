@@ -6,7 +6,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [macos-latest, ubuntu-18.04, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -23,23 +23,17 @@ jobs:
         uses: lukka/get-cmake@v3.19.2
 
       - name: Install Qt
+        id: qt
         uses: jurplel/install-qt-action@v2.12.1
         with:
           modules: qtcharts qtquick3d
           aqtversion: '>=0.11.1'
           py7zrversion: '>=0.11.3'
-          extra: '--external 7z'
       
       - name: Set up Python
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.py }}
-      
-      - name: Deps - Ubuntu
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: |
-          sudo apt-get update
-          sudo apt-get install build-essential libgl1-mesa-dev libxkbcommon-x11-0 libpulse-dev libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0-dev libxcb-render-util0 libxcb-xinerama0 -y
           
       - name: Build & Tests
         run: |
