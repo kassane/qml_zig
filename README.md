@@ -1,5 +1,5 @@
 # QML-zig
-![Build](https://github.com/kassane/qml_zig/workflows/CI/badge.svg?style=flat-square) ![GitHub All Releases](https://img.shields.io/github/downloads/kassane/qml_zig/total?style=flat-square) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/kassane/qml_zig?style=flat-square) ![GitHub](https://img.shields.io/github/license/kassane/qml_zig?style=flat-square)
+![Build](https://github.com/kassane/qml_zig/workflows/CI/badge.svg) ![GitHub All Releases](https://img.shields.io/github/downloads/kassane/qml_zig/total?style=flat-square) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/kassane/qml_zig?style=flat-square) ![GitHub](https://img.shields.io/github/license/kassane/qml_zig?style=flat-square)
 
 Bindings are based on [DOtherSide](https://github.com/filcuc/dotherside) C bindings for QML Library is mostly feature-compliant with other bindings based on the library, but lacks some minor features and has quite a few bugs.
 
@@ -15,7 +15,7 @@ All software required for building.
 - Qt 5.14 or higher
 - Zig v0.7.1 or higher
 - C++ compiler w/ C++11 support
-- CMake v3.2 or higher (DOtherSide build)
+- CMake v3.2 or higher and Ninja-build (DOtherSide build)
 
 ## Instructions
 
