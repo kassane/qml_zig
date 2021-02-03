@@ -15,6 +15,9 @@ jobs:
         run: |
             sudo apt-get update
             sudo apt-get install build-essential libgl1-mesa-dev libxkbcommon-x11-0 libpulse-dev qt5-default cmake -y
+    
+    - name: Install Qt5
+      uses: jurplel/install-qt-action@v2
       
       - name: Install zig
         uses: goto-bus-stop/setup-zig@v1
