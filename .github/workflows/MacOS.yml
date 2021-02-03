@@ -12,7 +12,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install
-        run: brew install qt gdb zig --HEAD
+        run: brew install gdb ninja zig --HEAD
 
       - name: Get specific version CMake, v3.19.2
         uses: lukka/get-cmake@v3.19.2

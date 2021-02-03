@@ -48,7 +48,7 @@ pub fn build(b: *Builder) !void {
     const mode = b.standardReleaseOptions();
     const target = b.standardTargetOptions(.{});
 
-    try cmakeBuild(b);
+    try cmakeBuild(b); // Note: If it is not necessary to compile DOtherSide library, please comment on this line.
 
     // Original examples
     try makeExample(b, mode, target, "examples/animated.zig", "Animated");
@@ -104,6 +104,7 @@ fn cmakeBuild(b: *Builder) !void {
     //CMake builds - DOtherSide build
     const DOtherSide_configure = b.addSystemCommand(&[_][]const u8{
         "cmake",
+        "-GNinja"
         "-B",
         "deps/dotherside/build",
         "-S",
@@ -117,7 +118,6 @@ fn cmakeBuild(b: *Builder) !void {
         "-j",
     });
 
-    // Note: If it is not necessary to compile DOtherSide library, please comment on these two lines.
     try DOtherSide_configure.step.make();
     try DOtherSide_build.step.make();
 }
