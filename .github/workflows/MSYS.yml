@@ -16,7 +16,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          path: temp
           submodules: recursive
           fetch-depth: 0
       
@@ -30,16 +29,11 @@ jobs:
           msystem: ${{ matrix.msystem }}
           install: git base-devel unzip mingw-w64-${{ matrix.arch }}-toolchain mingw-w64-${{ matrix.arch }}-cmake mingw-w64-${{ matrix.arch }}-qt5
           update: true
-
-      - name: Move Checkout
-        run: |
-          Copy-Item -Path ".\temp" -Destination "C:\_" -Recurse
       
       - name: Build & Tests
         shell: msys2 {0}
         run: |
           cd /C/_
-          echo "Building w/ Zig version: ${zig version}"
           zig build Animated -Dtarget=${{ matrix.arch }}-windows-gnu
           zig build Button -Dtarget=${{ matrix.arch }}-windows-gnu
           zig build Cells -Dtarget=${{ matrix.arch }}-windows-gnu

@@ -4,7 +4,6 @@ on: [push, pull_request]
 
 jobs:
   build:
-    container: fedora:latest
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,30 +13,13 @@ jobs:
       
       - name: Install buildtools
         run: |
-          uname -a
-          dnf -y install @development-tools @rpm-development-tools
-          dnf -y install copr-cli make gcc-c++
-          dnf -y upgrade git
+            sudo apt-get update
+            sudo apt-get install build-essential libgl1-mesa-dev libxkbcommon-x11-0 libpulse-dev qt5-default cmake -y
       
       - name: Install zig
         uses: goto-bus-stop/setup-zig@v1
         with:
           version: master
-
-      - name: get-cmake
-        uses: lukka/get-cmake@v3.19.2
-
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v2
-        with:
-          modules: qtcharts qtquick3d
-          aqtversion: '>=0.11.1'
-          py7zrversion: '>=0.11.3'
-      
-      - name: Set up Python
-        uses: actions/setup-python@v1
-        with:
-          python-version: '3.x'
 
       - name: Build & Tests
         run: |
