@@ -14,14 +14,14 @@ jobs:
       - name: Install
         run: brew install qt gdb zig --HEAD
 
+      - name: Get specific version CMake, v3.19.2
+        uses: lukka/get-cmake@v3.19.2
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+            dir: '${{ github.workspace }}/build/'
+
       - name: Build & Tests
         run: |
-          QTDIR="/usr/local/opt/qt/" && PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && CPPFLAGS=-I${QTDIR}/include;
-          zig build Animated
-          zig build Button
-          zig build Cells          
-          zig build Hello
-          zig build Layouts
-          zig build Particle
-          zig build Splits
-          zig build Table
+          QTDIR="$GITHUB_WORKSPACE/build/Qt/5.15.2/clang_64" && PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && CPPFLAGS=-I${QTDIR}/include;
+          zig build Hello -Drelease-safe

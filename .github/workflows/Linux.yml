@@ -13,13 +13,14 @@ jobs:
       
       - name: Install buildtools
         run: |
-            sudo apt-get update
-            sudo apt-get install build-essential libgl1-mesa-dev libxkbcommon-x11-0 libpulse-dev qt5-default cmake -y
+            sudo apt update
+            sudo apt install build-essential libgl1-mesa-dev libxkbcommon-x11-0 libpulse-dev cmake -y
     
       - name: Install Qt5
         uses: jurplel/install-qt-action@v2
         with:
           modules: qtcharts
+          dir: '${{ github.workspace }}/build/'
       
       - name: Install zig
         uses: goto-bus-stop/setup-zig@v1
@@ -28,11 +29,6 @@ jobs:
 
       - name: Build & Tests
         run: |
-          zig build Animated
-          zig build Button
-          zig build Cells          
+          QTDIR="$GITHUB_WORKSPACE/build/Qt/5.15.2/gcc_64" && PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && CPPFLAGS=-I${QTDIR}/include;
+          export QT_PLUGIN_PATH="${QTDIR}/plugins"
           zig build Hello
-          zig build Layouts
-          zig build Particle
-          zig build Splits
-          zig build Table

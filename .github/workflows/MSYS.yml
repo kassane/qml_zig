@@ -16,6 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
+          path: temp
           submodules: recursive
           fetch-depth: 0
       
@@ -27,17 +28,16 @@ jobs:
       - uses: msys2/setup-msys2@v2
         with:
           msystem: ${{ matrix.msystem }}
-          install: git base-devel unzip mingw-w64-${{ matrix.arch }}-toolchain mingw-w64-${{ matrix.arch }}-cmake mingw-w64-${{ matrix.arch }}-qt5
+          path-type: inherit
+          install: git base-devel binutils unzip mingw-w64-${{ matrix.arch }}-toolchain mingw-w64-${{ matrix.arch }}-cmake mingw-w64-${{ matrix.arch }}-qt5
           update: true
       
+      - name: Move Checkout
+        run: |
+          Copy-Item -Path ".\temp" -Destination "C:\_" -Recurse
+
       - name: Build & Tests
         shell: msys2 {0}
         run: |
-          zig build Animated -Dtarget=${{ matrix.arch }}-windows-gnu
-          zig build Button -Dtarget=${{ matrix.arch }}-windows-gnu
-          zig build Cells -Dtarget=${{ matrix.arch }}-windows-gnu
+          cd /C/_
           zig build Hello -Dtarget=${{ matrix.arch }}-windows-gnu
-          zig build Layouts -Dtarget=${{ matrix.arch }}-windows-gnu
-          zig build Particle -Dtarget=${{ matrix.arch }}-windows-gnu
-          zig build Splits -Dtarget=${{ matrix.arch }}-windows-gnu
-          zig build Table -Dtarget=${{ matrix.arch }}-windows-gnu
