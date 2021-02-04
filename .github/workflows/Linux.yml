@@ -19,6 +19,7 @@ jobs:
       - name: Install Qt5
         uses: jurplel/install-qt-action@v2
         with:
+          version: 5.14.2
           modules: qtcharts
           dir: '${{ github.workspace }}/build/'
       
