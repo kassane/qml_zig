@@ -14,12 +14,7 @@ jobs:
       - name: Install buildtools
         run: |
             sudo apt update
-            sudo apt install build-essential qtcreator ninja-build cmake -y
-      
-      - name: Install Qt5
-        uses: jurplel/install-qt-action@v2
-        with:
-          dir: '${{ github.workspace }}/build/'
+            sudo apt install build-essential libssl1.0-dev qttools5-dev qttools5-dev-tools qtbase5-dev qtpositioning5-dev qtlocation5-dev qtconnectivity5-dev qtmultimedia5-dev qtdeclarative5-dev qtquickcontrols2-5-dev libqt5serialport5-dev libqt5svg5-dev libqt5opengl5-dev libqt5charts5-dev qml-module-qtquick-controls2 qml-module-qtquick-layouts qml-module-qtpositioning qml-module-qtlocation qml-module-qtmultimedia qml-module-qtgraphicaleffects qml-module-qtcharts ninja-build cmake -y
       
       - name: Install zig
         uses: goto-bus-stop/setup-zig@v1
@@ -28,8 +23,5 @@ jobs:
 
       - name: Build & Tests
         run: |
-          QTDIR="$GITHUB_WORKSPACE/build/Qt/5.15.2/gcc_64" && PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && CPPFLAGS=-I${QTDIR}/include;
           export QT_DEBUG_PLUGINS=1
-          export QT_PLUGIN_PATH="${QTDIR}/plugins"
-          zig build Hello
-
+          zig build Hello -Drelease-safe
