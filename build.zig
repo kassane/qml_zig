@@ -47,8 +47,9 @@ const Pkgs = struct {
 pub fn build(b: *Builder) !void {
     const mode = b.standardReleaseOptions();
     const target = b.standardTargetOptions(.{});
-
-    try cmakeBuild(b); // Note: If it is not necessary to compile DOtherSide library, please comment on this line.
+    
+    // Note: If it is not necessary to compile DOtherSide library, please comment on this line.
+    try cmakeBuild(b);
 
     // Original examples
     try makeExample(b, mode, target, "examples/animated.zig", "Animated");
@@ -68,11 +69,14 @@ pub fn build(b: *Builder) !void {
 }
 
 fn makeExample(b: *Builder, mode: std.builtin.Mode, target: std.zig.CrossTarget, src: string, name: string) !void {
-    //Example 1
+    
     const example = b.addExecutable(name, src);
+    
+    //Strip file
     if (mode != .Debug) {
         example.strip = true;
     }
+        
     example.setBuildMode(mode);
     example.setTarget(target);
     example.addPackage(Pkgs.QObject);
@@ -85,7 +89,14 @@ fn makeExample(b: *Builder, mode: std.builtin.Mode, target: std.zig.CrossTarget,
     example.addPackage(Pkgs.QQmlApplicationEngine);
     example.addPackage(Pkgs.DOtherSide);
     example.addLibPath("deps/dotherside/build/lib");
-    example.linkSystemLibraryName("DOtherSide");
+    
+    if (b.target.iswindows()) {
+        const src_path = example.lib_paths();
+        example.installBinFile(src_path, "DOtherSide.dll");
+    }
+    else {
+        example.linkSystemLibraryName("DOtherSide");
+    }
     example.linkLibC();
     example.install();
 
@@ -115,7 +126,6 @@ fn cmakeBuild(b: *Builder) !void {
         "cmake",
         "--build",
         "deps/dotherside/build",
-        "-j",
     });
 
     try DOtherSide_configure.step.make();
