@@ -40,4 +40,4 @@ jobs:
         shell: msys2 {0}
         run: |
           cd /C/_
-          zig build -Drelease-safe -Dtarget=${{ matrix.arch }}-windows-gnu
+          zig build -Drelease-safe -Dtarget=native-windows-gnu
