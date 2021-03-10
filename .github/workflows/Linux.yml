@@ -18,10 +18,14 @@ jobs:
             libgl1-mesa-dev libxkbcommon-x11-0 libpulse-dev libxext-dev \
             libdrm-dev libx11-dev libudev-dev libinput-dev libts-dev libxcb-xinerama0-dev \
             libxcb-xinerama0 libxkbcommon-dev libxkbcommon-x11-dev libx11-dev libxcb1-dev \
-            libx11-xcb-dev libxext-dev libssl1.0-dev qttools5-dev qttools5-dev-tools qtbase5-dev \
-            qtpositioning5-dev qtlocation5-dev qtdeclarative5-dev qtquickcontrols2-5-dev libqt5svg5-dev \
-            libqt5opengl5-dev libqt5charts5-dev qml-module-qtquick-controls2 qml-module-qtquick-layouts \
-            qml-module-qtpositioning qml-module-qtgraphicaleffects qml-module-qtcharts ninja-build cmake -y
+            libx11-xcb-dev libxext-dev libssl1.0-dev ninja-build cmake -y
+      
+      - name: Install Qt5
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.15.2
+          modules: qtcharts
+          dir: '${{ github.workspace }}/build/'
       
       - name: Install zig
         uses: goto-bus-stop/setup-zig@v1
@@ -29,4 +33,6 @@ jobs:
           version: master
 
       - name: Build & Tests
-        run: CC="zig cc $@" CXX="zig c++ $@" zig build -Drelease-safe && ls zig-cache/bin
+        run: |
+              QTDIR="$GITHUB_WORKSPACE/build/Qt/5.15.2/gcc_64" && PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && CPPFLAGS=-I${QTDIR}/include;
+              CC="zig cc $@" CXX="zig c++ $@" zig build -Drelease-safe -Dtarget=native-native && ls zig-cache/bin
