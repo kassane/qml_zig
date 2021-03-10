@@ -47,9 +47,9 @@ const Pkgs = struct {
 pub fn build(b: *Builder) !void {
     const mode = b.standardReleaseOptions();
     const target = b.standardTargetOptions(.{});
-    
+
     // Note: If it is not necessary to compile DOtherSide library, please comment on this line.
-    try cmakeBuild(b);
+    try cmakeBuild(b, target);
 
     // Original examples
     try makeExample(b, mode, target, "examples/animated.zig", "Animated");
@@ -69,14 +69,13 @@ pub fn build(b: *Builder) !void {
 }
 
 fn makeExample(b: *Builder, mode: std.builtin.Mode, target: std.zig.CrossTarget, src: string, name: string) !void {
-    
     const example = b.addExecutable(name, src);
-    
+
     //Strip file
     if (mode != .Debug) {
         example.strip = true;
     }
-        
+
     example.setBuildMode(mode);
     example.setTarget(target);
     example.addPackage(Pkgs.QObject);
@@ -89,12 +88,10 @@ fn makeExample(b: *Builder, mode: std.builtin.Mode, target: std.zig.CrossTarget,
     example.addPackage(Pkgs.QQmlApplicationEngine);
     example.addPackage(Pkgs.DOtherSide);
     example.addLibPath("deps/dotherside/build/lib");
-    
+
     if (example.target.isWindows()) {
-        const src_path = example.lib_paths();
-        example.installBinFile(src_path, "DOtherSide.dll");
-    }
-    else {
+        example.linkSystemLibrary("DOtherSide.dll");
+    } else {
         example.linkSystemLibraryName("DOtherSide");
     }
     example.linkLibC();
@@ -111,7 +108,7 @@ fn makeExample(b: *Builder, mode: std.builtin.Mode, target: std.zig.CrossTarget,
     run_step.dependOn(&run_cmd.step);
 }
 
-fn cmakeBuild(b: *Builder) !void {
+fn cmakeBuild(b: *Builder, target: std.zig.CrossTarget) !void {
     //CMake builds - DOtherSide build
     const DOtherSide_configure = b.addSystemCommand(&[_][]const u8{
         "cmake",
@@ -130,4 +127,11 @@ fn cmakeBuild(b: *Builder) !void {
 
     try DOtherSide_configure.step.make();
     try DOtherSide_build.step.make();
+
+    if (target.isWindows() and target.getAbi() == .gnu) {
+        const renameFile = b.addSystemCommand(&[_][]const u8{
+            "mv", "deps/dotherside/build/lib/libDOtherSide.dll.a", "deps/dotherside/build/lib/DOtherSide.dll.lib",
+        });
+        try renameFile.step.make();
+    }
 }
