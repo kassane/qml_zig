@@ -16,13 +16,17 @@ jobs:
 
       - name: Get specific version CMake, v3.19.2
         uses: lukka/get-cmake@v3.19.2
+      
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
-          version: 5.14.2
+          version: 5.15.2
           dir: '${{ github.workspace }}/build/'
 
       - name: Build & Tests
         run: |
-          QTDIR="$GITHUB_WORKSPACE/build/Qt/5.14.2/clang_64" && PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && CPPFLAGS=-I${QTDIR}/include;
-          zig build Hello -Drelease-safe
+            QTDIR="$GITHUB_WORKSPACE/build/Qt/5.15.2/clang_64" && \
+            PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && \
+            CPPFLAGS=-I${QTDIR}/include && \
+            DYLD_LIBRARY_PATH=${{ github.workspace }}/deps/dotherside/build/lib/
+            zig build Hello -Drelease-safe -Dtarget=native-native
