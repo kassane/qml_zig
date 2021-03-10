@@ -29,4 +29,4 @@ jobs:
             PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && \
             CPPFLAGS=-I${QTDIR}/include && \
             DYLD_LIBRARY_PATH=${{ github.workspace }}/deps/dotherside/build/lib/
-            CC="zig cc $@" CXX="zig c++ $@" LD="zig ld64.lld $@" zig build Hello -Drelease-safe -Dtarget=native-native
+            CC="zig cc $@" CXX="zig c++ $@" LD="zig ld64.lld $@" zig build -Drelease-safe -Dtarget=native-native
