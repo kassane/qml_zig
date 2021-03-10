@@ -90,7 +90,7 @@ fn makeExample(b: *Builder, mode: std.builtin.Mode, target: std.zig.CrossTarget,
     example.addPackage(Pkgs.DOtherSide);
     example.addLibPath("deps/dotherside/build/lib");
     
-    if (b.target.iswindows()) {
+    if (example.target.iswindows()) {
         const src_path = example.lib_paths();
         example.installBinFile(src_path, "DOtherSide.dll");
     }
