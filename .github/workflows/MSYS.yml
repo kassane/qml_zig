@@ -38,6 +38,11 @@ jobs:
 
       - name: Build & Tests
         shell: msys2 {0}
+        if: ${{ matrix.arch == 'i686' }}
+        run: |
+          cd /C/_
+          zig build -Drelease-safe -Dtarget=i386-windows-gnu
+        else:
         run: |
           cd /C/_
           zig build -Drelease-safe -Dtarget=native-windows-gnu
