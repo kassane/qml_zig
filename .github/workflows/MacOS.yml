@@ -12,7 +12,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install
-        run: brew install qt cmake ninja zig --HEAD
+        run: brew install qt cmake ninja zig
 
       - name: Build & Tests
         run: |
