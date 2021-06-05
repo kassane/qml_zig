@@ -12,9 +12,20 @@ jobs:
           fetch-depth: 0
 
       - name: Install
-        run: brew install qt cmake ninja zig
+        run: brew install ninja zig --HEAD
+
+      - name: Get specific version CMake, v3.19.2
+        uses: lukka/get-cmake@v3.19.2
+      
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2
+        with:
+          version: 5.15.2
+          dir: '${{ github.workspace }}/build/'
 
       - name: Build & Tests
         run: |
-            QTDIR="/usr/local/opt/qt/" && PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && CPPFLAGS=-I${QTDIR}/include;
-            zig build -Drelease-safe -Dtarget=native-native
+            QTDIR="$GITHUB_WORKSPACE/build/Qt/5.15.2/clang_64" && \
+            PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && \
+            CPPFLAGS=-I${QTDIR}/include && \
+            CC="zig cc -target native-native" CXX="zig c++ -target native-native" zig build -Drelease-safe
