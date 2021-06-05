@@ -35,4 +35,4 @@ jobs:
       - name: Build & Tests
         run: |
               QTDIR="$GITHUB_WORKSPACE/build/Qt/5.15.2/gcc_64" && PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && CPPFLAGS=-I${QTDIR}/include;
-              CC="zig cc $@" CXX="zig c++ $@" zig build -Drelease-safe -Dtarget=native-native && ls zig-cache/bin
+              zig build -Drelease-safe && ls zig-out/bin
