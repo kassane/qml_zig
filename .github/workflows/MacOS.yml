@@ -12,7 +12,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install
-        run: brew install ninja zig --HEAD
+        run: brew install ninja
 
       - name: Get specific version CMake, v3.19.2
         uses: lukka/get-cmake@v3.19.2
@@ -23,9 +23,14 @@ jobs:
           version: 5.15.2
           dir: '${{ github.workspace }}/build/'
 
+      - name: Install zig
+        uses: goto-bus-stop/setup-zig@v1
+        with:
+          version: master
+          
       - name: Build & Tests
         run: |
             QTDIR="$GITHUB_WORKSPACE/build/Qt/5.15.2/clang_64" && \
             PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && \
             CPPFLAGS=-I${QTDIR}/include && \
-            CC="zig cc -target native-native" CXX="zig c++ -target native-native" zig build -Drelease-safe
+            CC="zig cc $@" CXX="zig c++ $@" zig build -Drelease-safe
