@@ -12,7 +12,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install
-        run: brew install ninja
+        run: brew install clang ninja
 
       - name: Get specific version CMake, v3.19.2
         uses: lukka/get-cmake@v3.19.2
@@ -33,4 +33,4 @@ jobs:
             QTDIR="$GITHUB_WORKSPACE/build/Qt/5.15.2/clang_64" && \
             PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && \
             CPPFLAGS=-I${QTDIR}/include && \
-            CC="zig cc $@" CXX="zig c++ $@" zig build -Drelease-safe
+            zig build -Drelease-safe
