@@ -33,4 +33,4 @@ jobs:
             QTDIR="$GITHUB_WORKSPACE/build/Qt/5.15.2/clang_64" && \
             PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && \
             CPPFLAGS=-I${QTDIR}/include && \
-            zig build -Drelease-safe
+            zig build -Drelease-safe && ls zig-out/bin
