@@ -8,39 +8,39 @@ const fmt_description = "Run the {s} example";
 const Pkgs = struct {
     const QObject: Pkg = .{
         .name = "QObject",
-        .path = "src/QObject.zig",
+        .path = .{ .path = "src/QObject.zig" },
     };
     const QMetaObject: Pkg = .{
         .name = "QMetaObject",
-        .path = "src/QMetaObject.zig",
+        .path = .{ .path = "src/QMetaObject.zig" },
     };
     const QVariant: Pkg = .{
         .name = "QVariant",
-        .path = "src/QVariant.zig",
+        .path = .{ .path = "src/QVariant.zig" },
     };
     const QQmlContext: Pkg = .{
         .name = "QQmlContext",
-        .path = "src/QQmlContext.zig",
+        .path = .{ .path = "src/QQmlContext.zig" },
     };
     const QMetaType: Pkg = .{
         .name = "QMetaType",
-        .path = "src/QMetaType.zig",
+        .path = .{ .path = "src/QMetaType.zig" },
     };
     const QUrl: Pkg = .{
         .name = "QUrl",
-        .path = "src/QUrl.zig",
+        .path = .{ .path = "src/QUrl.zig" },
     };
     const QQmlApplicationEngine: Pkg = .{
         .name = "QQmlApplicationEngine",
-        .path = "src/QQmlApplicationEngine.zig",
+        .path = .{ .path = "src/QQmlApplicationEngine.zig" },
     };
     const QGuiApplication: Pkg = .{
         .name = "QGuiApplication",
-        .path = "src/QGuiApplication.zig",
+        .path = .{ .path = "src/QGuiApplication.zig" },
     };
     const DOtherSide: Pkg = .{
         .name = "DOtherSide",
-        .path = "src/DOtherSide.zig",
+        .path = .{ .path = "src/DOtherSide.zig" },
     };
 };
 
@@ -49,7 +49,7 @@ pub fn build(b: *Builder) !void {
     const target = b.standardTargetOptions(.{});
 
     // Note: If it is not necessary to compile DOtherSide library, please comment on this line.
-    try cmakeBuild(b, target);
+    try cmakeBuild(b);
 
     // Original examples
     try makeExample(b, mode, target, "examples/animated.zig", "Animated");
@@ -87,13 +87,9 @@ fn makeExample(b: *Builder, mode: std.builtin.Mode, target: std.zig.CrossTarget,
     example.addPackage(Pkgs.QGuiApplication);
     example.addPackage(Pkgs.QQmlApplicationEngine);
     example.addPackage(Pkgs.DOtherSide);
-    example.addLibPath("deps/dotherside/build/lib");
+    example.addLibPath("zig-out/lib");
 
-    if (example.target.isWindows()) {
-        example.linkSystemLibrary("DOtherSide.dll");
-    } else {
-        example.linkSystemLibraryName("DOtherSide");
-    }
+    example.linkSystemLibraryName("DOtherSide");
     example.linkLibC();
     example.install();
 
@@ -108,13 +104,12 @@ fn makeExample(b: *Builder, mode: std.builtin.Mode, target: std.zig.CrossTarget,
     run_step.dependOn(&run_cmd.step);
 }
 
-fn cmakeBuild(b: *Builder, target: std.zig.CrossTarget) !void {
+fn cmakeBuild(b: *Builder) !void {
     //CMake builds - DOtherSide build
     const DOtherSide_configure = b.addSystemCommand(&[_][]const u8{
         "cmake",
-        "-GNinja",
         "-B",
-        "deps/dotherside/build",
+        "zig-out",
         "-S",
         "deps/dotherside",
         "-DCMAKE_BUILD_TYPE=Release",
@@ -122,16 +117,10 @@ fn cmakeBuild(b: *Builder, target: std.zig.CrossTarget) !void {
     const DOtherSide_build = b.addSystemCommand(&[_][]const u8{
         "cmake",
         "--build",
-        "deps/dotherside/build",
+        "zig-out",
+        "--parallel",
     });
 
     try DOtherSide_configure.step.make();
     try DOtherSide_build.step.make();
-
-    if (target.isWindows() and target.getAbi() == .gnu) {
-        const renameFile = b.addSystemCommand(&[_][]const u8{
-            "mv", "deps/dotherside/build/lib/libDOtherSide.dll.a", "deps/dotherside/build/lib/DOtherSide.dll.lib",
-        });
-        try renameFile.step.make();
-    }
 }

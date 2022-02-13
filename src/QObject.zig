@@ -1,5 +1,5 @@
 const std = @import("std");
-usingnamespace @import("./DOtherSide.zig");
+usingnamespace @import("DOtherSide.zig");
 
 pub fn QObject(comptime T: type) type {
     const typeInfo: std.builtin.TypeInfo = @typeInfo(T);

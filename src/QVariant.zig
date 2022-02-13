@@ -2,7 +2,7 @@ const dos = @import("DOtherSide.zig");
 
 //TODO: add rest of supported types
 pub const QVariant = struct {
-    vptr: ?*dos.DosQVariant,
+    vptr: ?*dos.dos_type.DosQVariant,
 
     pub fn create(value: anytype) QVariant {
         var vptr = switch (@typeInfo(@TypeOf(value))) {

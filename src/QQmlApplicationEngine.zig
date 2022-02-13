@@ -3,7 +3,7 @@ const QUrl = @import("QUrl.zig").QUrl;
 const QQmlContext = @import("QQmlContext.zig").QQmlContext;
 
 pub const QQmlApplicationEngine = struct {
-    vptr: ?*dos.DosQQmlApplicationEngine,
+    vptr: ?*dos.dos_type.DosQQmlApplicationEngine,
 
     pub fn create() QQmlApplicationEngine {
         return QQmlApplicationEngine{ .vptr = dos.dos_qqmlapplicationengine_create() };

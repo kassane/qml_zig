@@ -1,13 +1,13 @@
-usingnamespace @import("QGuiApplication");
-usingnamespace @import("QQmlApplicationEngine");
+const QGui = @import("QGuiApplication");
+const QQml = @import("QQmlApplicationEngine");
 
 pub fn main() anyerror!void {
-    QGuiApplication.init();
-    defer QGuiApplication.quit();
+    QGui.QGuiApplication.init();
+    defer QGui.QGuiApplication.quit();
 
-    var engine = QQmlApplicationEngine.create();
+    var engine = QQml.QQmlApplicationEngine.create();
     defer engine.delete();
 
     engine.loadData(@embedFile("button.qml"));
-    QGuiApplication.exec();
+    QGui.QGuiApplication.exec();
 }
