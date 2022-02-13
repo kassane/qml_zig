@@ -1,7 +1,7 @@
 const dos = @import("DOtherSide.zig");
 
 pub const QUrl = struct {
-    vptr: ?*dos.DosQUrl,
+    vptr: ?*dos.dos_type.DosQUrl,
 
     pub fn create(url: [*c]const u8) QUrl {
         return QUrl{

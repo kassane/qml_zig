@@ -1,6 +1,6 @@
 const std = @import("std");
-const dos = @import("./DOtherSide.zig");
-const QMetaType = @import("./QMetaType.zig").QMetaType;
+const dos = @import("DOtherSide.zig");
+const QMetaType = @import("QMetaType.zig").QMetaType;
 
 pub const ParameterDefinition = struct {
     name: [*c]const u8,
@@ -170,7 +170,7 @@ pub const QMetaObject = struct {
         comptime var properties: []const PropertyDefinition = &[_]PropertyDefinition{};
 
         inline for (@typeInfo(T).Struct.fields) |field| {
-            comptime if (field.field_type == ?*c_void)
+            comptime if (field.field_type == ?*anyopaque)
                 continue;
             comptime var name = &[_]u8{toUpper(field.name[0])} ++ field.name[1..field.name.len];
 

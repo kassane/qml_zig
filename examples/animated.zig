@@ -1,12 +1,12 @@
-usingnamespace @import("QGuiApplication");
-usingnamespace @import("QQmlApplicationEngine");
+const QGui = @import("QGuiApplication");
+const QQml = @import("QQmlApplicationEngine");
 const QUrl = @import("QUrl").QUrl;
 
 pub fn main() anyerror!void {
-    QGuiApplication.init();
-    defer QGuiApplication.quit();
+    QGui.QGuiApplication.init();
+    defer QGui.QGuiApplication.quit();
 
-    var engine = QQmlApplicationEngine.create();
+    var engine = QQml.QQmlApplicationEngine.create();
     defer engine.delete();
 
     // engine.load("../../../examples/animated.qml"); //load file runtime (depedence file)
@@ -16,5 +16,5 @@ pub fn main() anyerror!void {
     //                  or
     // engine.loadData(@embedFile("animated.qml")); // load file comptime (qrc equivalent)
 
-    QGuiApplication.exec();
+    QGui.QGuiApplication.exec();
 }
