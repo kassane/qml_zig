@@ -89,11 +89,7 @@ fn makeExample(b: *Builder, mode: std.builtin.Mode, target: std.zig.CrossTarget,
     example.addPackage(Pkgs.DOtherSide);
     example.addLibPath("zig-out/lib");
 
-    if (example.target.isWindows()) {
-        example.linkSystemLibrary("DOtherSide");
-    } else {
-        example.linkSystemLibraryName("DOtherSide");
-    }
+    example.linkSystemLibraryName("DOtherSide");
     example.linkLibC();
     example.install();
 
