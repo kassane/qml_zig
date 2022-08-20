@@ -8,39 +8,39 @@ const fmt_description = "Run the {s} example";
 const Pkgs = struct {
     const QObject: Pkg = .{
         .name = "QObject",
-        .path = .{ .path = "src/QObject.zig" },
+        .source = .{ .path = "src/QObject.zig" },
     };
     const QMetaObject: Pkg = .{
         .name = "QMetaObject",
-        .path = .{ .path = "src/QMetaObject.zig" },
+        .source = .{ .path = "src/QMetaObject.zig" },
     };
     const QVariant: Pkg = .{
         .name = "QVariant",
-        .path = .{ .path = "src/QVariant.zig" },
+        .source = .{ .path = "src/QVariant.zig" },
     };
     const QQmlContext: Pkg = .{
         .name = "QQmlContext",
-        .path = .{ .path = "src/QQmlContext.zig" },
+        .source = .{ .path = "src/QQmlContext.zig" },
     };
     const QMetaType: Pkg = .{
         .name = "QMetaType",
-        .path = .{ .path = "src/QMetaType.zig" },
+        .source = .{ .path = "src/QMetaType.zig" },
     };
     const QUrl: Pkg = .{
         .name = "QUrl",
-        .path = .{ .path = "src/QUrl.zig" },
+        .source = .{ .path = "src/QUrl.zig" },
     };
     const QQmlApplicationEngine: Pkg = .{
         .name = "QQmlApplicationEngine",
-        .path = .{ .path = "src/QQmlApplicationEngine.zig" },
+        .source = .{ .path = "src/QQmlApplicationEngine.zig" },
     };
     const QGuiApplication: Pkg = .{
         .name = "QGuiApplication",
-        .path = .{ .path = "src/QGuiApplication.zig" },
+        .source = .{ .path = "src/QGuiApplication.zig" },
     };
     const DOtherSide: Pkg = .{
         .name = "DOtherSide",
-        .path = .{ .path = "src/DOtherSide.zig" },
+        .source = .{ .path = "src/DOtherSide.zig" },
     };
 };
 
