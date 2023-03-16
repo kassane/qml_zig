@@ -12,9 +12,8 @@ Bindings are based on [DOtherSide](https://github.com/filcuc/dotherside) C bindi
 
 All software required for building.
 
-- Qt 5.14 or higher
-- Zig v0.10.0 or higher
-- C++ compiler w/ C++11 support
+- Qt 5.15 or higher
+- Zig v0.11.0 or higher
 - CMake v3.2 or higher (DOtherSide build)
 
 ## Instructions

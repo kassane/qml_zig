@@ -41,7 +41,7 @@ jobs:
         if: ${{ matrix.arch == 'i686' }}
         run: |
             cd /C/_
-            zig build -Doptimize=ReleaseSafe -Dtarget=i386-windows-gnu
+            zig build -Doptimize=ReleaseSafe -Dtarget=x86-windows-gnu
         
       - name: Build & Tests (x86_x64)
         shell: msys2 {0}
