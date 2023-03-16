@@ -1,52 +1,12 @@
 const std = @import("std");
-const Builder = std.build.Builder;
+const Builder = std.Build.Builder;
 const Pkg = std.build.Pkg;
 const string = []const u8;
-const alloc = std.heap.page_allocator;
 const fmt_description = "Run the {s} example";
 
-const Pkgs = struct {
-    const QObject: Pkg = .{
-        .name = "QObject",
-        .source = .{ .path = "src/QObject.zig" },
-    };
-    const QMetaObject: Pkg = .{
-        .name = "QMetaObject",
-        .source = .{ .path = "src/QMetaObject.zig" },
-    };
-    const QVariant: Pkg = .{
-        .name = "QVariant",
-        .source = .{ .path = "src/QVariant.zig" },
-    };
-    const QQmlContext: Pkg = .{
-        .name = "QQmlContext",
-        .source = .{ .path = "src/QQmlContext.zig" },
-    };
-    const QMetaType: Pkg = .{
-        .name = "QMetaType",
-        .source = .{ .path = "src/QMetaType.zig" },
-    };
-    const QUrl: Pkg = .{
-        .name = "QUrl",
-        .source = .{ .path = "src/QUrl.zig" },
-    };
-    const QQmlApplicationEngine: Pkg = .{
-        .name = "QQmlApplicationEngine",
-        .source = .{ .path = "src/QQmlApplicationEngine.zig" },
-    };
-    const QGuiApplication: Pkg = .{
-        .name = "QGuiApplication",
-        .source = .{ .path = "src/QGuiApplication.zig" },
-    };
-    const DOtherSide: Pkg = .{
-        .name = "DOtherSide",
-        .source = .{ .path = "src/DOtherSide.zig" },
-    };
-};
-
 pub fn build(b: *Builder) !void {
-    const mode = b.standardReleaseOptions();
     const target = b.standardTargetOptions(.{});
+    const mode = b.standardOptimizeOption(.{});
 
     // Note: If it is not necessary to compile DOtherSide library, please comment on this line.
     try cmakeBuild(b);
@@ -69,25 +29,25 @@ pub fn build(b: *Builder) !void {
 }
 
 fn makeExample(b: *Builder, mode: std.builtin.Mode, target: std.zig.CrossTarget, src: string, name: string) !void {
-    const example = b.addExecutable(name, src);
+    const example = b.addExecutable(.{
+        .name = name,
+        .root_source_file = .{ .path = src },
+        .optimize = mode,
+        .target = target,
+    });
 
     //Strip file
     if (mode != .Debug) {
         example.strip = true;
     }
 
-    example.setBuildMode(mode);
-    example.setTarget(target);
-    example.addPackage(Pkgs.QObject);
-    example.addPackage(Pkgs.QVariant);
-    example.addPackage(Pkgs.QUrl);
-    example.addPackage(Pkgs.QMetaType);
-    example.addPackage(Pkgs.QMetaObject);
-    example.addPackage(Pkgs.QQmlContext);
-    example.addPackage(Pkgs.QGuiApplication);
-    example.addPackage(Pkgs.QQmlApplicationEngine);
-    example.addPackage(Pkgs.DOtherSide);
-    example.addLibPath("zig-out/lib");
+    // Module
+    const Qt = b.createModule(.{
+        .source_file = .{ .path = "src/Qt.zig" },
+    });
+
+    example.addModule("Qt", Qt);
+    example.addLibraryPath("zig-cache/lib");
 
     example.linkSystemLibraryName("DOtherSide");
     example.linkLibC();
@@ -99,7 +59,7 @@ fn makeExample(b: *Builder, mode: std.builtin.Mode, target: std.zig.CrossTarget,
         run_cmd.addArgs(args);
     }
 
-    var descr = std.fmt.allocPrintZ(alloc, fmt_description, .{name}) catch unreachable;
+    var descr = b.fmt(fmt_description, .{name});
     const run_step = b.step(name, descr);
     run_step.dependOn(&run_cmd.step);
 }
@@ -109,7 +69,7 @@ fn cmakeBuild(b: *Builder) !void {
     const DOtherSide_configure = b.addSystemCommand(&[_][]const u8{
         "cmake",
         "-B",
-        "zig-out",
+        "zig-cache",
         "-S",
         "deps/dotherside",
         "-DCMAKE_BUILD_TYPE=Release",
@@ -117,7 +77,7 @@ fn cmakeBuild(b: *Builder) !void {
     const DOtherSide_build = b.addSystemCommand(&[_][]const u8{
         "cmake",
         "--build",
-        "zig-out",
+        "zig-cache",
         "--parallel",
     });
 

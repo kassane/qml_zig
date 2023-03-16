@@ -10,27 +10,22 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 0
+      - uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: master
 
       - name: Install
-        run: brew install ninja
+        run: brew install cmake
 
-      - name: Get specific version CMake, v3.19.2
-        uses: lukka/get-cmake@v3.19.2
-      
       - name: Install Qt
         uses: jurplel/install-qt-action@v2
         with:
           version: 5.15.2
           dir: '${{ github.workspace }}/build/'
-
-      - name: Install zig
-        uses: goto-bus-stop/setup-zig@v1
-        with:
-          version: master
           
       - name: Build & Tests
         run: |
             QTDIR="$GITHUB_WORKSPACE/build/Qt/5.15.2/clang_64" && \
             PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && \
             CPPFLAGS=-I${QTDIR}/include && \
-            zig build -Drelease-safe && ls zig-out/bin
+            zig build -Doptimize=ReleaseSafe && ls zig-out/bin
