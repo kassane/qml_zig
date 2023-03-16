@@ -1,12 +1,11 @@
-const QGui = @import("QGuiApplication");
-const QQml = @import("QQmlApplicationEngine");
-const QUrl = @import("QUrl").QUrl;
+const Qt = @import("Qt");
+const QUrl = Qt.QUrl;
 
 pub fn main() anyerror!void {
-    QGui.QGuiApplication.init();
-    defer QGui.QGuiApplication.quit();
+    Qt.QGuiApplication.init();
+    defer Qt.QGuiApplication.quit();
 
-    var engine = QQml.QQmlApplicationEngine.create();
+    var engine = Qt.QQmlApplicationEngine.create();
     defer engine.delete();
 
     // engine.load("../../../examples/animated.qml"); //load file runtime (depedence file)
@@ -16,5 +15,5 @@ pub fn main() anyerror!void {
     //                  or
     // engine.loadData(@embedFile("animated.qml")); // load file comptime (qrc equivalent)
 
-    QGui.QGuiApplication.exec();
+    Qt.QGuiApplication.exec();
 }

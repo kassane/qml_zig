@@ -9,19 +9,19 @@ jobs:
       fail-fast: false
       matrix:
         include: [
-          { msystem: MINGW64, arch: x86_64, prefix: /mingw64 },
-          { msystem: MINGW32, arch: i686, prefix: /mingw32   }
+          { msystem: CLANG64, arch: x86_64, prefix: /clang64 },
+          { msystem: CLANG32, arch: i686, prefix: /clang32   }
         ]
     
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: temp
           submodules: recursive
           fetch-depth: 0
       
       - name: Install zig
-        uses: goto-bus-stop/setup-zig@v1
+        uses: goto-bus-stop/setup-zig@v2
         with:
           version: master
 
@@ -29,7 +29,7 @@ jobs:
         with:
           msystem: ${{ matrix.msystem }}
           path-type: inherit
-          install: git base-devel binutils unzip mingw-w64-${{ matrix.arch }}-toolchain mingw-w64-${{ matrix.arch }}-ninja mingw-w64-${{ matrix.arch }}-cmake mingw-w64-${{ matrix.arch }}-qt5
+          install: git base-devel binutils unzip mingw-w64-clang-${{ matrix.arch }}-toolchain mingw-w64-clang-${{ matrix.arch }}-cmake mingw-w64-clang-${{ matrix.arch }}-qt5
           update: true
       
       - name: Move Checkout
@@ -41,11 +41,13 @@ jobs:
         if: ${{ matrix.arch == 'i686' }}
         run: |
             cd /C/_
-            zig build -Drelease-safe -Dtarget=i386-windows-gnu
+            zig build -Doptimize=ReleaseSafe -Dtarget=i386-windows-gnu
         
       - name: Build & Tests (x86_x64)
         shell: msys2 {0}
         if: ${{ matrix.arch == 'x86_64' }}
         run: |
             cd /C/_
-            zig build -Drelease-safe -Dtarget=x86_64-windows-gnu
+            export CC=gcc
+            export CXX=g++
+            zig build -Doptimize=ReleaseSafe -Dtarget=x86_64-windows-gnu

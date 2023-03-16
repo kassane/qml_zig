@@ -1,13 +1,12 @@
-const QGui = @import("QGuiApplication");
-const QQml = @import("QQmlApplicationEngine");
+const Qt = @import("Qt");
 
 pub fn main() anyerror!void {
-    QGui.QGuiApplication.init();
-    defer QGui.QGuiApplication.quit();
+    Qt.QGuiApplication.init();
+    defer Qt.QGuiApplication.quit();
 
-    var engine = QQml.QQmlApplicationEngine.create();
+    var engine = Qt.QQmlApplicationEngine.create();
     defer engine.delete();
 
     engine.loadData(@embedFile("splitview.qml"));
-    QGui.QGuiApplication.exec();
+    Qt.QGuiApplication.exec();
 }

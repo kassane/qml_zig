@@ -56,7 +56,7 @@ pub const QMetaObject = struct {
                         .Fn => |Fn| {
                             comptime var parameters: []const ParameterDefinition = &[_]ParameterDefinition{};
 
-                            inline for (Fn.args) |arg, i| {
+                            inline for (Fn.args, 0..) |arg, i| {
                                 if (i == 0)
                                     continue;
                                 parameters = parameters ++ &[_]ParameterDefinition{.{
@@ -80,9 +80,9 @@ pub const QMetaObject = struct {
         const allocator = std.heap.page_allocator;
         const list = try allocator.alloc(dos.SignalDefinition, signals.len);
 
-        for (signals) |signal, i| {
+        for (signals, 0..) |signal, i| {
             var parameterList = try allocator.alloc(dos.ParameterDefinition, signal.parameters.len);
-            for (signal.parameters) |parameter, pi| {
+            for (signal.parameters, 0..) |parameter, pi| {
                 parameterList[pi] = dos.ParameterDefinition{
                     .name = parameter.name,
                     .metaType = @enumToInt(parameter.type_),
@@ -116,7 +116,7 @@ pub const QMetaObject = struct {
                 .Fn => |Fn| {
                     comptime var parameters: []const ParameterDefinition = &[_]ParameterDefinition{};
 
-                    inline for (@typeInfo(Fn.fn_type).Fn.args) |arg, i| {
+                    inline for (@typeInfo(Fn.fn_type).Fn.args, 0..) |arg, i| {
                         if (i == 0)
                             continue;
                         parameters = parameters ++ &[_]ParameterDefinition{.{
@@ -138,9 +138,9 @@ pub const QMetaObject = struct {
         const allocator = std.heap.page_allocator;
         const list = try allocator.alloc(dos.SlotDefinition, slots.len);
 
-        for (slots) |slot, i| {
+        for (slots, 0..) |slot, i| {
             var parameterList = try allocator.alloc(dos.ParameterDefinition, slot.parameters.len);
-            for (slot.parameters) |parameter, pi| {
+            for (slot.parameters, 0..) |parameter, pi| {
                 parameterList[pi] = dos.ParameterDefinition{
                     .name = parameter.name,
                     .metaType = @enumToInt(parameter.type_),
@@ -189,7 +189,7 @@ pub const QMetaObject = struct {
         const allocator = std.heap.page_allocator;
         const list = try allocator.alloc(dos.PropertyDefinition, properties.len);
 
-        for (properties) |property, i| {
+        for (properties, 0..) |property, i| {
             list[i] = dos.PropertyDefinition{
                 .name = property.name,
                 .propertyMetaType = @enumToInt(property.type_),

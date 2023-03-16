@@ -6,10 +6,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           submodules: recursive
           fetch-depth: 0
+      - uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: master
       
       - name: Install buildtools
         run: |
@@ -18,7 +21,7 @@ jobs:
             libgl1-mesa-dev libxkbcommon-x11-0 libpulse-dev libxext-dev \
             libdrm-dev libx11-dev libudev-dev libinput-dev libts-dev libxcb-xinerama0-dev \
             libxcb-xinerama0 libxkbcommon-dev libxkbcommon-x11-dev libx11-dev libxcb1-dev \
-            libx11-xcb-dev libxext-dev ninja-build cmake -y
+            libx11-xcb-dev libxext-dev cmake -y
       
       - name: Install Qt5
         uses: jurplel/install-qt-action@v2
@@ -26,13 +29,8 @@ jobs:
           version: 5.15.2
           modules: qtcharts
           dir: '${{ github.workspace }}/build/'
-      
-      - name: Install zig
-        uses: goto-bus-stop/setup-zig@v1
-        with:
-          version: master
 
       - name: Build & Tests
         run: |
               QTDIR="$GITHUB_WORKSPACE/build/Qt/5.15.2/gcc_64" && PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && CPPFLAGS=-I${QTDIR}/include;
-              zig build -Drelease-safe && ls zig-out/bin
+              zig build -Doptimize=ReleaseSafe && ls zig-out/bin

@@ -1,4 +1,4 @@
-const dos = @import("./DOtherSide.zig");
+const dos = @import("DOtherSide.zig");
 
 pub const QGuiApplication = struct {
     pub fn init() void {
