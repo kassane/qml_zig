@@ -16,6 +16,12 @@ All software required for building.
 - Zig v0.11.0 or higher
 - CMake v3.2 or higher (DOtherSide build)
 
+### Question
+
+#### Works on Qt6?
+
+Maybe, check [DOtherSide](https://github.com/filcuc/dotherside) support!!
+
 ## Instructions
 
 ~~~bash
@@ -25,8 +31,11 @@ git clone --recursive https://github.com/kassane/qml_zig
 # Open folder
 cd qml_zig
 
+# build DOtherSide
+zig build cmake
+
 # Build
-zig build ExampleName -Drelease-safe|-Drelease-fast|-Drelease-small
+zig build ExampleName -Doptimize=ReleaseSafe|-Doptimize=ReleaseFast|-Doptimize=ReleaseSmall
 ~~~
 
 # Examples

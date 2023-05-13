@@ -41,13 +41,13 @@ jobs:
         if: ${{ matrix.arch == 'i686' }}
         run: |
             cd /C/_
-            zig build -Doptimize=ReleaseSafe -Dtarget=x86-windows-gnu
+            zig build cmake
+            zig build -Dtarget=x86-windows -fsummary -freference-trace
         
       - name: Build & Tests (x86_x64)
         shell: msys2 {0}
         if: ${{ matrix.arch == 'x86_64' }}
         run: |
             cd /C/_
-            export CC=gcc
-            export CXX=g++
-            zig build -Doptimize=ReleaseSafe -Dtarget=x86_64-windows-gnu
+            zig build cmake
+            zig build -Dtarget=x86_64-windows -fsummary -freference-trace
