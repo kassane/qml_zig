@@ -18,14 +18,14 @@ jobs:
         run: brew install cmake
 
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v3
         with:
-          version: 5.15.9
+          version: 5.15.2
           dir: '${{ github.workspace }}/build/'
           
       - name: Build & Tests
         run: |
-            QTDIR="$GITHUB_WORKSPACE/build/Qt/5.15.9/clang_64" && \
+            QTDIR="$GITHUB_WORKSPACE/build/Qt/5.15.2/clang_64" && \
             PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && \
             CPPFLAGS=-I${QTDIR}/include && \
             zig build cmake && \
