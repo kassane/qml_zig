@@ -1,43 +1,74 @@
 const std = @import("std");
-const Builder = std.Build.Builder;
-const Pkg = std.build.Pkg;
 const string = []const u8;
-const fmt_description = "Run the {s} example";
 
-pub fn build(b: *Builder) !void {
+pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
     const mode = b.standardOptimizeOption(.{});
 
     // Note: If it is not necessary to compile DOtherSide library, please comment on this line.
-    try cmakeBuild(b);
+    const cmake = cmakeBuild(b);
+    const cmake_step = b.step("cmake", "Run cmake build");
+    cmake_step.dependOn(&cmake.step);
 
     // Original examples
-    try makeExample(b, mode, target, "examples/animated.zig", "Animated");
-    try makeExample(b, mode, target, "examples/hello.zig", "Hello");
-
-    // More examples
-    try makeExample(b, mode, target, "examples/button.zig", "Button");
-
-    // Copypasta from the Go QML eamples https://github.com/go-qml/qml/tree/v1/examples
-    try makeExample(b, mode, target, "examples/particle.zig", "Particle");
-    try makeExample(b, mode, target, "examples/layouts.zig", "Layouts");
-    try makeExample(b, mode, target, "examples/splitview.zig", "Splits");
-    try makeExample(b, mode, target, "examples/tableview.zig", "Tables");
-
-    // Cloned simple examples from the Qml doco
-    try makeExample(b, mode, target, "examples/cells.zig", "Cells");
-}
-
-fn makeExample(b: *Builder, mode: std.builtin.Mode, target: std.zig.CrossTarget, src: string, name: string) !void {
-    const example = b.addExecutable(.{
-        .name = name,
-        .root_source_file = .{ .path = src },
+    try makeExample(b, .{
         .optimize = mode,
         .target = target,
+        .path = "examples/animated.zig",
+    });
+    try makeExample(b, .{
+        .optimize = mode,
+        .target = target,
+        .path = "examples/hello.zig",
+    });
+
+    // More examples
+    try makeExample(b, .{
+        .optimize = mode,
+        .target = target,
+        .path = "examples/button.zig",
+    });
+
+    // Copypasta from the Go QML eamples https://github.com/go-qml/qml/tree/v1/examples
+    try makeExample(b, .{
+        .optimize = mode,
+        .target = target,
+        .path = "examples/particle.zig",
+    });
+    try makeExample(b, .{
+        .optimize = mode,
+        .target = target,
+        .path = "examples/layouts.zig",
+    });
+    try makeExample(b, .{
+        .optimize = mode,
+        .target = target,
+        .path = "examples/splitview.zig",
+    });
+    try makeExample(b, .{
+        .optimize = mode,
+        .target = target,
+        .path = "examples/tableview.zig",
+    });
+
+    // Cloned simple examples from the Qml doco
+    try makeExample(b, .{
+        .optimize = mode,
+        .target = target,
+        .path = "examples/cells.zig",
+    });
+}
+
+fn makeExample(b: *std.Build, src: BuildInfo) !void {
+    const example = b.addExecutable(.{
+        .name = src.filename(),
+        .root_source_file = .{ .path = src.path },
+        .optimize = src.optimize,
+        .target = src.target,
     });
 
     //Strip file
-    if (mode != .Debug) {
+    if (src.optimize != .Debug) {
         example.strip = true;
     }
 
@@ -51,20 +82,21 @@ fn makeExample(b: *Builder, mode: std.builtin.Mode, target: std.zig.CrossTarget,
 
     example.linkSystemLibraryName("DOtherSide");
     example.linkLibC();
-    example.install();
 
-    const run_cmd = example.run();
+    b.installArtifact(example);
+
+    const run_cmd = b.addRunArtifact(example);
     run_cmd.step.dependOn(b.getInstallStep());
     if (b.args) |args| {
         run_cmd.addArgs(args);
     }
 
-    var descr = b.fmt(fmt_description, .{name});
-    const run_step = b.step(name, descr);
+    var descr = b.fmt("Run the {s} example", .{src.filename()});
+    const run_step = b.step(src.filename(), descr);
     run_step.dependOn(&run_cmd.step);
 }
 
-fn cmakeBuild(b: *Builder) !void {
+fn cmakeBuild(b: *std.Build) *std.Build.Step.Run {
     //CMake builds - DOtherSide build
     const DOtherSide_configure = b.addSystemCommand(&[_][]const u8{
         "cmake",
@@ -72,7 +104,7 @@ fn cmakeBuild(b: *Builder) !void {
         "zig-cache",
         "-S",
         "deps/dotherside",
-        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_BUILD_TYPE=RelMinSize",
     });
     const DOtherSide_build = b.addSystemCommand(&[_][]const u8{
         "cmake",
@@ -81,6 +113,17 @@ fn cmakeBuild(b: *Builder) !void {
         "--parallel",
     });
 
-    try DOtherSide_configure.step.make();
-    try DOtherSide_build.step.make();
+    DOtherSide_build.step.dependOn(&DOtherSide_configure.step);
+    return DOtherSide_build;
 }
+
+const BuildInfo = struct {
+    path: string,
+    target: std.zig.CrossTarget,
+    optimize: std.builtin.OptimizeMode,
+
+    fn filename(self: BuildInfo) []const u8 {
+        var split = std.mem.split(u8, std.fs.path.basename(self.path), ".");
+        return split.first();
+    }
+};
