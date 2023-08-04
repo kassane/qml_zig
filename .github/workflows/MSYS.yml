@@ -23,7 +23,7 @@ jobs:
       - name: Install zig
         uses: goto-bus-stop/setup-zig@v2
         with:
-          version: master
+          version: 0.11.0
 
       - uses: msys2/setup-msys2@v2
         with:
@@ -42,7 +42,7 @@ jobs:
         run: |
             cd /C/_
             zig build cmake
-            zig build -Dtarget=x86-windows -fsummary -freference-trace
+            zig build -Dtarget=x86-windows --summary all -freference-trace
         
       - name: Build & Tests (x86_x64)
         shell: msys2 {0}
@@ -50,4 +50,4 @@ jobs:
         run: |
             cd /C/_
             zig build cmake
-            zig build -Dtarget=x86_64-windows -fsummary -freference-trace
+            zig build -Dtarget=x86_64-windows --summary all -freference-trace

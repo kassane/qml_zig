@@ -85,19 +85,19 @@ pub const QMetaObject = struct {
             for (signal.parameters, 0..) |parameter, pi| {
                 parameterList[pi] = dos.ParameterDefinition{
                     .name = parameter.name,
-                    .metaType = @enumToInt(parameter.type_),
+                    .metaType = @intFromEnum(parameter.type_),
                 };
             }
             list[i] = dos.SignalDefinition{
                 .name = signal.name,
-                .parametersCount = @intCast(c_int, signal.parameters.len),
+                .parametersCount = @as(c_int, @intCast(signal.parameters.len)),
                 .parameters = if (signal.parameters.len > 0) &parameterList[0] else null,
             };
         }
 
         if (signals.len > 0) {
             return dos.SignalDefinitions{
-                .count = @intCast(c_int, signals.len),
+                .count = @as(c_int, @intCast(signals.len)),
                 .definitions = &list[0],
             };
         } else {
@@ -143,19 +143,19 @@ pub const QMetaObject = struct {
             for (slot.parameters, 0..) |parameter, pi| {
                 parameterList[pi] = dos.ParameterDefinition{
                     .name = parameter.name,
-                    .metaType = @enumToInt(parameter.type_),
+                    .metaType = @intFromEnum(parameter.type_),
                 };
             }
             list[i] = dos.SlotDefinition{
                 .name = slot.name,
-                .parametersCount = @intCast(c_int, parameterList.len),
-                .returnMetaType = @enumToInt(slot.returnType),
+                .parametersCount = @as(c_int, @intCast(parameterList.len)),
+                .returnMetaType = @intFromEnum(slot.returnType),
                 .parameters = if (slot.parameters.len > 0) &parameterList[0] else null,
             };
         }
         if (slots.len > 0) {
             return dos.SlotDefinitions{
-                .count = @intCast(c_int, slots.len),
+                .count = @as(c_int, @intCast(slots.len)),
                 .definitions = &list[0],
             };
         } else {
@@ -192,7 +192,7 @@ pub const QMetaObject = struct {
         for (properties, 0..) |property, i| {
             list[i] = dos.PropertyDefinition{
                 .name = property.name,
-                .propertyMetaType = @enumToInt(property.type_),
+                .propertyMetaType = @intFromEnum(property.type_),
                 .readSlot = property.readSlot,
                 .writeSlot = property.writeSlot,
                 .notifySignal = property.notifySignal,
@@ -200,7 +200,7 @@ pub const QMetaObject = struct {
         }
 
         var result = dos.PropertyDefinitions{
-            .count = @intCast(c_int, properties.len),
+            .count = @as(c_int, @intCast(properties.len)),
             .definitions = &list[0],
         };
 
@@ -209,27 +209,27 @@ pub const QMetaObject = struct {
 
     fn freeSignalDefinitions(signals: dos.SignalDefinitions) void {
         if (signals.count > 0) {
-            for (signals.definitions[0..@intCast(usize, signals.count)]) |signal| {
-                std.heap.page_allocator.free(signal.parameters[0..@intCast(usize, signal.parametersCount)]);
+            for (signals.definitions[0..@as(usize, @intCast(signals.count))]) |signal| {
+                std.heap.page_allocator.free(signal.parameters[0..@as(usize, @intCast(signal.parametersCount))]);
             }
-            std.heap.page_allocator.free(signals.definitions[0..@intCast(usize, signals.count)]);
+            std.heap.page_allocator.free(signals.definitions[0..@as(usize, @intCast(signals.count))]);
         }
     }
 
     fn freeSlotDefinitions(slots: dos.SlotDefinitions) void {
         if (slots.count > 0) {
-            for (slots.definitions[0..@intCast(usize, slots.count)]) |slot| {
+            for (slots.definitions[0..@as(usize, @intCast(slots.count))]) |slot| {
                 if (slot.parametersCount > 0) {
-                    std.heap.page_allocator.free(slot.parameters[0..@intCast(usize, slot.parametersCount)]);
+                    std.heap.page_allocator.free(slot.parameters[0..@as(usize, @intCast(slot.parametersCount))]);
                 }
             }
-            std.heap.page_allocator.free(slots.definitions[0..@intCast(usize, slots.count)]);
+            std.heap.page_allocator.free(slots.definitions[0..@as(usize, @intCast(slots.count))]);
         }
     }
 
     fn freePropertyDefinitions(properties: dos.PropertyDefinitions) void {
         if (properties.count > 0) {
-            std.heap.page_allocator.free(properties.definitions[0..@intCast(usize, properties.count)]);
+            std.heap.page_allocator.free(properties.definitions[0..@as(usize, @intCast(properties.count))]);
         }
     }
 };
