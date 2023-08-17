@@ -80,7 +80,7 @@ fn makeExample(b: *std.Build, src: BuildInfo) !void {
     example.addModule("Qt", Qt);
     example.addLibraryPath(.{ .path = "zig-cache/lib" });
 
-    if (info.target.isWindows()) {
+    if (example.target.isWindows()) {
         example.want_lto = false;
         example.linkSystemLibraryName("DOtherSide.dll");
     } else example.linkSystemLibrary("DOtherSide");
