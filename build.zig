@@ -83,7 +83,7 @@ fn makeExample(b: *std.Build, src: BuildInfo) !void {
     if (info.target.isWindows()) {
         example.want_lto = false;
         example.linkSystemLibraryName("DOtherSide.dll");
-    } else unicornBuild.linkSystemLibrary("DOtherSide");
+    } else example.linkSystemLibrary("DOtherSide");
     example.linkLibC();
 
     b.installArtifact(example);
