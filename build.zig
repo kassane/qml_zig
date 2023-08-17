@@ -80,7 +80,10 @@ fn makeExample(b: *std.Build, src: BuildInfo) !void {
     example.addModule("Qt", Qt);
     example.addLibraryPath(.{ .path = "zig-cache/lib" });
 
-    example.linkSystemLibraryName("DOtherSide");
+    if (info.target.isWindows()) {
+        example.want_lto = false;
+        example.linkSystemLibraryName("DOtherSide.dll");
+    } else unicornBuild.linkSystemLibrary("DOtherSide");
     example.linkLibC();
 
     b.installArtifact(example);
