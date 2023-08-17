@@ -1,5 +1,5 @@
 const std = @import("std");
-const string = []const u8;
+const GitRepoStep = @import("GitRepoStep.zig");
 
 pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
@@ -78,9 +78,12 @@ fn makeExample(b: *std.Build, src: BuildInfo) !void {
     });
 
     example.addModule("Qt", Qt);
-    example.addLibraryPath("zig-cache/lib");
+    example.addLibraryPath(.{ .path = "zig-cache/lib" });
 
-    example.linkSystemLibraryName("DOtherSide");
+    if (example.target.isWindows()) {
+        example.want_lto = false;
+        example.linkSystemLibraryName("DOtherSide.dll");
+    } else example.linkSystemLibrary("DOtherSide");
     example.linkLibC();
 
     b.installArtifact(example);
@@ -97,13 +100,20 @@ fn makeExample(b: *std.Build, src: BuildInfo) !void {
 }
 
 fn cmakeBuild(b: *std.Build) *std.Build.Step.Run {
+    const repo = GitRepoStep.create(b, .{
+        .url = "https://github.com/filcuc/dotherside.git",
+        .branch = "master",
+        .sha = "244a9d62cb51519ca45fe2e69d77ec965f190fbb",
+        .fetch_enabled = true,
+    });
+
     //CMake builds - DOtherSide build
     const DOtherSide_configure = b.addSystemCommand(&[_][]const u8{
         "cmake",
         "-B",
         "zig-cache",
         "-S",
-        "deps/dotherside",
+        "dep/dotherside.git",
         "-DCMAKE_BUILD_TYPE=RelMinSize",
     });
     const DOtherSide_build = b.addSystemCommand(&[_][]const u8{
@@ -113,17 +123,18 @@ fn cmakeBuild(b: *std.Build) *std.Build.Step.Run {
         "--parallel",
     });
 
+    DOtherSide_configure.step.dependOn(&repo.step);
     DOtherSide_build.step.dependOn(&DOtherSide_configure.step);
     return DOtherSide_build;
 }
 
 const BuildInfo = struct {
-    path: string,
+    path: []const u8,
     target: std.zig.CrossTarget,
     optimize: std.builtin.OptimizeMode,
 
     fn filename(self: BuildInfo) []const u8 {
-        var split = std.mem.split(u8, std.fs.path.basename(self.path), ".");
+        var split = std.mem.splitSequence(u8, std.fs.path.basename(self.path), ".");
         return split.first();
     }
 };
