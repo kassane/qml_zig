@@ -1,5 +1,4 @@
 const std = @import("std");
-const GitRepoStep = @import("GitRepoStep.zig");
 
 pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
@@ -100,20 +99,14 @@ fn makeExample(b: *std.Build, src: BuildInfo) !void {
 }
 
 fn cmakeBuild(b: *std.Build) *std.Build.Step.Run {
-    const repo = GitRepoStep.create(b, .{
-        .url = "https://github.com/filcuc/dotherside.git",
-        .branch = "master",
-        .sha = "244a9d62cb51519ca45fe2e69d77ec965f190fbb",
-        .fetch_enabled = true,
-    });
-
+    const dotherside = b.dependency("dotherside", .{}).path("").getPath(b);
     //CMake builds - DOtherSide build
     const DOtherSide_configure = b.addSystemCommand(&[_][]const u8{
         "cmake",
         "-B",
         "zig-cache",
         "-S",
-        "dep/dotherside.git",
+        dotherside,
         "-DCMAKE_BUILD_TYPE=RelMinSize",
     });
     const DOtherSide_build = b.addSystemCommand(&[_][]const u8{
@@ -123,7 +116,6 @@ fn cmakeBuild(b: *std.Build) *std.Build.Step.Run {
         "--parallel",
     });
 
-    DOtherSide_configure.step.dependOn(&repo.step);
     DOtherSide_build.step.dependOn(&DOtherSide_configure.step);
     return DOtherSide_build;
 }

@@ -1,0 +1,10 @@
+.{
+    .name = "qml_zig",
+    .version = "0.2.0",
+    .dependencies = .{
+        .dotherside = .{
+            .url = "https://github.com/filcuc/dotherside/archive/refs/tags/v0.9.0.tar.gz",
+            .hash = "12205bf339b850a538f3905caebe1c6685a5793fccb982c515c09274170123f0deb4",
+        },
+    },
+}
