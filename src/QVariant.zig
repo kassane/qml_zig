@@ -5,7 +5,7 @@ pub const QVariant = struct {
     vptr: ?*dos.dos_type.DosQVariant,
 
     pub fn create(value: anytype) QVariant {
-        var vptr = switch (@typeInfo(@TypeOf(value))) {
+        const vptr = switch (@typeInfo(@TypeOf(value))) {
             .Null => dos.dos_qvariant_create(),
             .Pointer => dos.dos_qvariant_create_string(value),
             .Int => dos.dos_qvariant_create_int(@as(c_int, @intCast(value))),

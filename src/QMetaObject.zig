@@ -172,7 +172,7 @@ pub const QMetaObject = struct {
         inline for (@typeInfo(T).Struct.fields) |field| {
             comptime if (field.field_type == ?*anyopaque)
                 continue;
-            comptime var name = &[_]u8{toUpper(field.name[0])} ++ field.name[1..field.name.len];
+            const name = &[_]u8{toUpper(field.name[0])} ++ field.name[1..field.name.len];
 
             comptime if (!@hasDecl(T, "get" ++ name))
                 @compileError("Field \"" ++ field.name ++ "\" doesnt have getter: get" ++ name);
@@ -199,7 +199,7 @@ pub const QMetaObject = struct {
             };
         }
 
-        var result = dos.PropertyDefinitions{
+        const result = dos.PropertyDefinitions{
             .count = @as(c_int, @intCast(properties.len)),
             .definitions = &list[0],
         };
@@ -241,12 +241,13 @@ fn toUpper(c: u8) u8 {
 }
 
 fn hasSignal(comptime T: type, comptime name: []const u8) bool {
-    comptime var signals: []const SignalDefinition = &[_]SignalDefinition{};
     inline for (@typeInfo(T).Struct.decls) |declaration| {
         switch (declaration.data) {
             .Var => |Var| {
                 switch (@typeInfo(Var)) {
                     .Fn => |Fn| {
+                        _ = Fn;
+
                         if (std.mem.eql(u8, name, declaration.name))
                             return true;
                     },
