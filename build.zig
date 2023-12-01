@@ -93,7 +93,7 @@ fn makeExample(b: *std.Build, src: BuildInfo) !void {
         run_cmd.addArgs(args);
     }
 
-    var descr = b.fmt("Run the {s} example", .{src.filename()});
+    const descr = b.fmt("Run the {s} example", .{src.filename()});
     const run_step = b.step(src.filename(), descr);
     run_step.dependOn(&run_cmd.step);
 }
