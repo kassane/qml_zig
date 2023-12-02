@@ -4,6 +4,13 @@ pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
     const mode = b.standardOptimizeOption(.{});
 
+    // Module
+    _ = b.addModule("Qt", .{
+        .source_file = .{
+            .path = "src/Qt.zig",
+        },
+    });
+
     // Note: If it is not necessary to compile DOtherSide library, please comment on this line.
     const cmake = cmakeBuild(b);
     const cmake_step = b.step("cmake", "Run cmake build");
@@ -71,12 +78,7 @@ fn makeExample(b: *std.Build, src: BuildInfo) !void {
         example.strip = true;
     }
 
-    // Module
-    const Qt = b.createModule(.{
-        .source_file = .{ .path = "src/Qt.zig" },
-    });
-
-    example.addModule("Qt", Qt);
+    example.addModule("Qt", b.modules.get("Qt").?);
     example.addLibraryPath(.{ .path = "zig-cache/lib" });
 
     if (example.target.isWindows()) {
@@ -98,7 +100,7 @@ fn makeExample(b: *std.Build, src: BuildInfo) !void {
     run_step.dependOn(&run_cmd.step);
 }
 
-fn cmakeBuild(b: *std.Build) *std.Build.Step.Run {
+pub fn cmakeBuild(b: *std.Build) *std.Build.Step.Run {
     const dotherside = b.dependency("dotherside", .{}).path("").getPath(b);
     //CMake builds - DOtherSide build
     const DOtherSide_configure = b.addSystemCommand(&[_][]const u8{
