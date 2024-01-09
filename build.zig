@@ -6,7 +6,7 @@ pub fn build(b: *std.Build) !void {
 
     // Module
     _ = b.addModule("Qt", .{
-        .source_file = .{
+        .root_source_file = .{
             .path = "src/Qt.zig",
         },
     });
@@ -75,16 +75,15 @@ fn makeExample(b: *std.Build, src: BuildInfo) !void {
 
     //Strip file
     if (src.optimize != .Debug) {
-        example.strip = true;
+        example.root_module.strip = true;
     }
 
-    example.addModule("Qt", b.modules.get("Qt").?);
+    example.root_module.addImport("Qt", b.modules.get("Qt").?);
     example.addLibraryPath(.{ .path = "zig-cache/lib" });
 
-    if (example.target.isWindows()) {
+    if (example.rootModuleTarget().os.tag == .windows)
         example.want_lto = false;
-        example.linkSystemLibraryName("DOtherSide.dll");
-    } else example.linkSystemLibrary("DOtherSide");
+    example.linkSystemLibrary("DOtherSide");
     example.linkLibC();
 
     b.installArtifact(example);
@@ -102,7 +101,8 @@ fn makeExample(b: *std.Build, src: BuildInfo) !void {
 
 pub fn cmakeBuild(b: *std.Build) *std.Build.Step.Run {
     const dotherside = b.dependency("dotherside", .{}).path("").getPath(b);
-    //CMake builds - DOtherSide build
+
+    // CMake builds - DOtherSide build
     const DOtherSide_configure = b.addSystemCommand(&[_][]const u8{
         "cmake",
         "-B",
@@ -124,7 +124,7 @@ pub fn cmakeBuild(b: *std.Build) *std.Build.Step.Run {
 
 const BuildInfo = struct {
     path: []const u8,
-    target: std.zig.CrossTarget,
+    target: std.Build.ResolvedTarget,
     optimize: std.builtin.OptimizeMode,
 
     fn filename(self: BuildInfo) []const u8 {
