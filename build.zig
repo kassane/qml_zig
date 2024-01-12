@@ -81,9 +81,10 @@ fn makeExample(b: *std.Build, src: BuildInfo) !void {
     example.root_module.addImport("Qt", b.modules.get("Qt").?);
     example.addLibraryPath(.{ .path = "zig-cache/lib" });
 
-    if (example.rootModuleTarget().os.tag == .windows)
+    if (example.rootModuleTarget().os.tag == .windows) {
         example.want_lto = false;
-    example.linkSystemLibrary("DOtherSide");
+        example.linkSystemLibrary2("DOtherSide.dll", .{ .use_pkg_config = .no });
+    } else example.linkSystemLibrary("DOtherSide");
     example.linkLibC();
 
     b.installArtifact(example);
