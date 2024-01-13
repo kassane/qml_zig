@@ -29,7 +29,7 @@ jobs:
         with:
           msystem: ${{ matrix.msystem }}
           path-type: inherit
-          install: git base-devel binutils unzip mingw-w64-clang-${{ matrix.arch }}-toolchain mingw-w64-clang-${{ matrix.arch }}-cmake mingw-w64-clang-${{ matrix.arch }}-qt5
+          install: git base-devel binutils unzip mingw-w64-clang-${{ matrix.arch }}-toolchain mingw-w64-clang-${{ matrix.arch }}-cmake mingw-w64-clang-${{ matrix.arch }}-qt5-base mingw-w64-clang-${{ matrix.arch }}-qt5-declarative
           update: true
       
       - name: Move Checkout
