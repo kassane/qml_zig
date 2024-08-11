@@ -14,17 +14,13 @@ jobs:
         ]
     
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           path: temp
           submodules: recursive
           fetch-depth: 0
       
-      - name: Install zig
-        uses: goto-bus-stop/setup-zig@v2
-        with:
-          version: master
-
+      - uses: mlugg/setup-zig@v1
       - uses: msys2/setup-msys2@v2
         with:
           msystem: ${{ matrix.msystem }}

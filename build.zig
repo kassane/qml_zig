@@ -6,9 +6,7 @@ pub fn build(b: *std.Build) !void {
 
     // Module
     _ = b.addModule("Qt", .{
-        .root_source_file = .{
-            .path = "src/Qt.zig",
-        },
+        .root_source_file = b.path("src/Qt.zig"),
     });
 
     // Note: If it is not necessary to compile DOtherSide library, please comment on this line.
@@ -68,7 +66,7 @@ pub fn build(b: *std.Build) !void {
 fn makeExample(b: *std.Build, src: BuildInfo) !void {
     const example = b.addExecutable(.{
         .name = src.filename(),
-        .root_source_file = .{ .path = src.path },
+        .root_source_file = b.path(src.path),
         .optimize = src.optimize,
         .target = src.target,
     });
@@ -79,7 +77,7 @@ fn makeExample(b: *std.Build, src: BuildInfo) !void {
     }
 
     example.root_module.addImport("Qt", b.modules.get("Qt").?);
-    example.addLibraryPath(.{ .path = "zig-cache/lib" });
+    example.addLibraryPath(b.path(".zig-cache/lib"));
 
     if (example.rootModuleTarget().os.tag == .windows) {
         example.want_lto = false;
@@ -107,7 +105,7 @@ pub fn cmakeBuild(b: *std.Build) *std.Build.Step.Run {
     const DOtherSide_configure = b.addSystemCommand(&[_][]const u8{
         "cmake",
         "-B",
-        "zig-cache",
+        ".zig-cache",
         "-S",
         dotherside,
         "-DCMAKE_BUILD_TYPE=RelMinSize",
@@ -115,7 +113,7 @@ pub fn cmakeBuild(b: *std.Build) *std.Build.Step.Run {
     const DOtherSide_build = b.addSystemCommand(&[_][]const u8{
         "cmake",
         "--build",
-        "zig-cache",
+        ".zig-cache",
         "--parallel",
     });
 

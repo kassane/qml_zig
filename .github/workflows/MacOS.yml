@@ -6,19 +6,14 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
-      - uses: goto-bus-stop/setup-zig@v2
-        with:
-          version: master
-
+      - uses: mlugg/setup-zig@v1
       - name: Install
         run: brew install cmake
-
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v3
+      - uses: jurplel/install-qt-action@v3
         with:
           version: 5.15.2
           dir: '${{ github.workspace }}/build/'
