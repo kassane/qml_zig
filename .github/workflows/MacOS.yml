@@ -1,6 +1,10 @@
 name: MacOS
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   build:
@@ -13,14 +17,14 @@ jobs:
       - uses: mlugg/setup-zig@v1
       - name: Install
         run: brew install cmake
-      - uses: jurplel/install-qt-action@v3
+      - uses: jurplel/install-qt-action@v4
         with:
-          version: 5.15.2
+          version: 6.8.2
           dir: '${{ github.workspace }}/build/'
           
       - name: Build & Tests
         run: |
-            QTDIR="$GITHUB_WORKSPACE/build/Qt/5.15.2/clang_64" && \
+            QTDIR="$GITHUB_WORKSPACE/build/Qt/6.8.2/clang_64" && \
             PATH="${QTDIR}/bin:$PATH" && LDFLAGS=-L${QTDIR}/lib && \
             CPPFLAGS=-I${QTDIR}/include && \
             zig build cmake && \

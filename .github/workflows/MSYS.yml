@@ -1,6 +1,10 @@
 name: MSYS2 (MingW)
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   build:
@@ -10,7 +14,7 @@ jobs:
       matrix:
         include: [
           { msystem: CLANG64, arch: x86_64, prefix: /clang64 },
-          { msystem: CLANG32, arch: i686, prefix: /clang32   }
+          # { msystem: CLANG32, arch: i686, prefix: /clang32   }
         ]
     
     steps:
@@ -25,20 +29,20 @@ jobs:
         with:
           msystem: ${{ matrix.msystem }}
           path-type: inherit
-          install: git base-devel binutils unzip mingw-w64-clang-${{ matrix.arch }}-toolchain mingw-w64-clang-${{ matrix.arch }}-cmake mingw-w64-clang-${{ matrix.arch }}-qt5-base mingw-w64-clang-${{ matrix.arch }}-qt5-declarative
+          install: git base-devel binutils unzip mingw-w64-clang-${{ matrix.arch }}-toolchain mingw-w64-clang-${{ matrix.arch }}-cmake mingw-w64-clang-${{ matrix.arch }}-qt6-base mingw-w64-clang-${{ matrix.arch }}-qt6-declarative
           update: true
       
       - name: Move Checkout
         run: |
           Copy-Item -Path ".\temp" -Destination "C:\_" -Recurse
 
-      - name: Build & Tests (x86)
-        shell: msys2 {0}
-        if: ${{ matrix.arch == 'i686' }}
-        run: |
-            cd /C/_
-            zig build cmake
-            zig build -Dtarget=x86-windows --summary all -freference-trace
+      # - name: Build & Tests (x86)
+      #   shell: msys2 {0}
+      #   if: ${{ matrix.arch == 'i686' }}
+      #   run: |
+      #       cd /C/_
+      #       zig build cmake
+      #       zig build -Dtarget=x86-windows --summary all -freference-trace
         
       - name: Build & Tests (x86_x64)
         shell: msys2 {0}
