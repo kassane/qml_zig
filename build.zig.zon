@@ -1,12 +1,19 @@
 .{
-    .name = "qml_zig",
+    .name = .qml_zig,
     .version = "0.2.0",
-    .minimum_zig_version = "0.12.0",
-    .paths = .{""},
+    .minimum_zig_version = "0.14.0",
+    .fingerprint = 0x923a544e6b808cc6,
+    .paths = .{
+        "build.zig.zon",
+        "build.zig",
+        "src",
+        "README.md",
+        "LICENSE",
+    },
     .dependencies = .{
         .dotherside = .{
-            .url = "git+https://github.com/filcuc/dotherside#244a9d62cb51519ca45fe2e69d77ec965f190fbb",
-            .hash = "12208668c059863dd4467ccf67fc2af37a4aa0ef863b7703c617948eac816c6575fc",
+            .url = "git+https://github.com/filcuc/dotherside#56cb910b368ad0f8ef1f18ef52d46ab8136ca5d6",
+            .hash = "N-V-__8AAOS6BQCGuntyjwYjjkXwt4xU33mcVW_sgHs0IYRS",
         },
     },
 }
